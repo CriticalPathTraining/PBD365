@@ -1,0 +1,9 @@
+﻿body {
+  background-color: orange;
+}
+
+#page-width {
+  background: white;
+  min-height: 480px;
+  padding: 8px;
+}
