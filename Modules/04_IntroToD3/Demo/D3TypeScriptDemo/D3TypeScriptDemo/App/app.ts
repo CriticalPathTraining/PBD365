@@ -24,7 +24,7 @@
 
     $(window).resize(updateUI);
     onNavigationToggle();
-    LoadVisual(visuals[6]);
+    LoadVisual(visuals[0]);
 
   });
 

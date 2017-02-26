@@ -16,7 +16,7 @@ var myApp;
         $("#left-nav-toggle").click(onNavigationToggle);
         $(window).resize(updateUI);
         onNavigationToggle();
-        LoadVisual(visuals[6]);
+        LoadVisual(visuals[0]);
     });
     function onNavigationToggle() {
         leftNavCollapsed = !leftNavCollapsed;
@@ -61,4 +61,3 @@ var myApp;
     }
     myApp.updateUI = updateUI;
 })(myApp || (myApp = {}));
-//# sourceMappingURL=app.js.map
