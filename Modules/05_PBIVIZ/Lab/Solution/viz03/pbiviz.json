@@ -1,0 +1,26 @@
+{
+  "visual": {
+    "name": "viz03",
+    "displayName": "viz03",
+    "guid": "PBI_CV_063C4F2A_B7C8_4568_9B67_28A7314B0793",
+    "visualClassName": "Visual",
+    "version": "1.0.0",
+    "description": "",
+    "supportUrl": "",
+    "gitHubUrl": ""
+  },
+  "apiVersion": "1.5.0",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "assets": {
+    "icon": "assets/icon.png"
+  },
+  "externalJS": [
+    "node_modules/d3/d3.js"
+  ],
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "dependencies": "dependencies.json"
+}

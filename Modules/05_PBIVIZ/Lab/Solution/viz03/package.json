@@ -1,0 +1,6 @@
+{
+  "name": "visual",
+  "dependencies": {
+    "d3": "^3.5.5"
+  }
+}
