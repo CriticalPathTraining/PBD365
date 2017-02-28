@@ -9,9 +9,8 @@
   },
   "files": [
     ".api/v1.5.0/PowerBI-visuals.d.ts",
-    "src/visual.ts",
-    "node_modules/jquery/dist/jquery.js",
-    "node_modules/@types/jquery/index.d.ts"
+    "node_modules/@types/jquery/index.d.ts",
+    "src/visual.ts"
   ]
 }
 

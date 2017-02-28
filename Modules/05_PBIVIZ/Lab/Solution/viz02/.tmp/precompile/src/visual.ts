@@ -1,4 +1,4 @@
-module powerbi.extensibility.visual.PBI_CV_1F297329_EBD9_43ED_9E6C_798DF0E8D6A6  {
+module powerbi.extensibility.visual.PBI_CV_75DE18A7_A280_4405_AC95_921191D07CCD  {
 
     export class Visual implements IVisual {
 
