@@ -1,0 +1,9 @@
+{
+  "name": "visual",
+  "dependencies": {
+    "@types/d3": "^3.5.38",
+    "d3": "^3.5.17"
+  }
+}
+
+
