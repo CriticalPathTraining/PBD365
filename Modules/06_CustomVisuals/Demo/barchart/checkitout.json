@@ -1,0 +1,90 @@
+[
+  {
+    "metadata": {
+      "columns": {
+        "0": {
+          "roles": { "measure": true },
+          "type": {
+            "underlyingType": 258,
+            "category": null
+          },
+          "format": "\\$#,0;(\\$#,0);\\$#,0",
+          "displayName": "Sales Revenue",
+          "queryName": "Sales.Sales Revenue",
+          "expr": {
+            "_kind": 3,
+            "source": {
+              "_kind": 0,
+              "entity": "Sales"
+            },
+            "ref": "Sales Revenue"
+          }
+        },
+        "1": {
+          "roles": { "category": true },
+          "type": {
+            "underlyingType": 7013377,
+            "category": "StateOrProvince",
+            "geographyType": { "underlyingType": 7013377 }
+          },
+          "displayName": "State",
+          "queryName": "Customers.State",
+          "expr": {
+            "_kind": 2,
+            "source": {
+              "_kind": 0,
+              "entity": "Customers"
+            },
+            "ref": "State"
+          }
+        }
+      }
+    },
+    "categorical": {
+      "categories": {
+        "0": {
+          "source": {
+            "roles": { "category": true },
+            "type": {
+              "underlyingType": 7013377,
+              "category": "StateOrProvince",
+              "geographyType": { "underlyingType": 7013377 }
+            },
+            "displayName": "State",
+            "queryName": "Customers.State",
+            "expr": {
+              "_kind": 2,
+              "source": {
+                "_kind": 0,
+                "entity": "Customers"
+              },
+              "ref": "State"
+            }
+          }
+        }
+      },
+      "values": {
+        "0": {
+          "source": {
+            "roles": { "measure": true },
+            "type": {
+              "underlyingType": 258,
+              "category": null
+            },
+            "format": "\\$#,0;(\\$#,0);\\$#,0",
+            "displayName": "Sales Revenue",
+            "queryName": "Sales.Sales Revenue",
+            "expr": {
+              "_kind": 3,
+              "source": {
+                "_kind": 0,
+                "entity": "Sales"
+              },
+              "ref": "Sales Revenue"
+            }
+          }
+        }
+      }
+    }
+  }
+]

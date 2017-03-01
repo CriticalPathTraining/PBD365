@@ -9562,51 +9562,48 @@ var powerbi;
             (function (PBI_CV_996C8E45_0D05_4C52_B0C1_2C020A0F20DE) {
                 var Visual = (function () {
                     function Visual(options) {
-                        this.svg = d3.select(options.element).append('svg');
-                        this.svgGroupMain = this.svg.append('g');
-                        this.enableAxis = false;
+                        this.padding = 12;
+                        this.svgRoot = d3.select(options.element).append('svg');
+                        this.svgGroupMain = this.svgRoot.append("g");
                     }
                     Visual.prototype.update = function (options) {
                         // ensure that categorical dataview contains categories and measurable values 
                         var categorical = options.dataViews[0].categorical;
                         if (typeof categorical.categories === "undefined" || typeof categorical.values === "undefined") {
                             // remove all existing SVG elements 
-                            this.svgGroupMain.selectAll("g").remove();
+                            this.svgGroupMain.empty();
                             return;
                         }
-                        this.dataView = options.dataViews[0];
-                        // get height and width from viewport
-                        this.svg.attr({
-                            height: options.viewport.height,
-                            width: options.viewport.width
-                        });
-                        var paddingSVG = 12;
+                        // get categorical data from visual data view
+                        this.dataview = options.dataViews[0];
+                        // convert categorical data into specialized data structure for data binding
+                        var visualData = Visual.converter(this.dataview.categorical);
+                        this.svgRoot
+                            .attr("width", options.viewport.width)
+                            .attr("height", options.viewport.height);
                         var xAxisOffset = 50;
                         var yAxisOffset = 24;
                         var plot = {
-                            xOffset: paddingSVG + xAxisOffset,
-                            yOffset: paddingSVG,
-                            width: options.viewport.width - (paddingSVG * 2) - xAxisOffset,
-                            height: options.viewport.height - (paddingSVG * 2) - yAxisOffset,
+                            xOffset: this.padding + xAxisOffset,
+                            yOffset: this.padding,
+                            width: options.viewport.width - (this.padding * 2) - xAxisOffset,
+                            height: options.viewport.height - (this.padding * 2) - yAxisOffset,
                         };
                         this.svgGroupMain.attr({
                             height: plot.height,
                             width: plot.width,
                             transform: 'translate(' + plot.xOffset + ',' + plot.yOffset + ')'
                         });
-                        // convert data format
-                        var dataResult = Visual.converter(options.dataViews[0].categorical);
                         // setup d3 scale
                         var xScale = d3.scale.ordinal()
-                            .domain(dataResult.map(function (d) { return d.Category; }))
+                            .domain(visualData.map(function (d) { return d.Category; }))
                             .rangeRoundBands([0, plot.width], 0.1);
-                        var yMax = d3.max(dataResult, function (d) { return d.Value * 1.05; });
+                        var yMax = d3.max(visualData, function (d) { return d.Value * 1.05; });
                         var yScale = d3.scale.linear()
                             .domain([0, yMax])
                             .range([plot.height, 0]);
-                        // remove existing SVG elements from previous update
-                        this.svg.selectAll('.axis').remove();
-                        this.svg.selectAll('.bar').remove();
+                        this.svgRoot.selectAll('.axis').remove();
+                        this.svgRoot.selectAll('.bar').remove();
                         // draw x axis
                         var xAxis = d3.svg.axis()
                             .scale(xScale)
@@ -9622,35 +9619,32 @@ var powerbi;
                         var yAxis = d3.svg.axis()
                             .scale(yScale)
                             .orient('left')
+                            .ticks(5)
                             .tickFormat(function (d) { return formatValue(d); });
                         this.svgGroupMain
                             .append('g')
                             .attr('class', 'y axis')
-                            .style('fill', 'black') // you can get from metadata
+                            .style('fill', 'black')
                             .call(yAxis);
-                        // draw bar
-                        var svgGroupBars = this.svgGroupMain
+                        var datasetSize = visualData.length;
+                        var xScaleFactor = plot.width / datasetSize;
+                        var yValueMax = d3.max(visualData, function (d) { return d.Value; });
+                        var yScaleFactor = plot.height / yValueMax;
+                        var barWidth = (plot.width / datasetSize) * 0.92;
+                        var bars = this.svgGroupMain
                             .append('g')
                             .selectAll('.bar')
-                            .data(dataResult);
-                        svgGroupBars.enter()
+                            .data(visualData);
+                        bars
+                            .enter()
                             .append('rect')
-                            .attr('class', 'bar')
-                            .attr('fill', Visual.getFill(this.dataView).solid.color)
-                            .attr('stroke', 'black')
-                            .attr('x', function (d) {
-                            return xScale(d.Category);
-                        })
-                            .attr('width', xScale.rangeBand())
-                            .attr('y', function (d) {
-                            return yScale(d.Value);
-                        })
-                            .attr('height', function (d) {
-                            return plot.height - yScale(d.Value);
-                        });
-                        svgGroupBars
-                            .exit()
-                            .remove();
+                            .attr('class', 'bar');
+                        bars
+                            .attr("x", function (d, i) { return xScale(d.Category); })
+                            .attr("y", function (d, i) { return yScale(d.Value); })
+                            .attr("width", function (d, i) { return xScale.rangeBand(); })
+                            .attr("height", function (d, i) { return plot.height - yScale(d.Value); })
+                            .attr("fill", Visual.getFill(this.dataview).solid.color);
                     };
                     Visual.getFill = function (dataView) {
                         if (dataView) {
@@ -9675,7 +9669,7 @@ var powerbi;
                                 objectEnumeration.push({
                                     objectName: objectName,
                                     properties: {
-                                        fill: Visual.getFill(this.dataView)
+                                        fill: Visual.getFill(this.dataview)
                                     },
                                     selector: null
                                 });
@@ -9684,18 +9678,21 @@ var powerbi;
                         ;
                         return objectEnumeration;
                     };
-                    Visual.converter = function (cat) {
-                        var resultData = [];
-                        for (var i = 0; i < cat.categories[0].values.length; i++) {
-                            resultData.push({
-                                Category: cat.categories[0].values[i].toString(),
-                                Value: cat.values[0].values[i]
+                    Visual.converter = function (categoricalData) {
+                        var visualData = [];
+                        var categories = categoricalData.categories[0].values;
+                        var categoryValues = categoricalData.values[0].values;
+                        for (var i = 0; i < categoryValues.length; i++) {
+                            var category = categories[i];
+                            var categoryValue = categoryValues[i];
+                            visualData.push({
+                                Category: category,
+                                Value: categoryValue
                             });
                         }
-                        resultData.sort(function (x, y) { return y.Value - x.Value; });
-                        return resultData;
+                        visualData.sort(function (cat1, cat2) { return cat2.Value - cat1.Value; });
+                        return visualData;
                     };
-                    Visual.prototype.destroy = function () { };
                     return Visual;
                 }());
                 PBI_CV_996C8E45_0D05_4C52_B0C1_2C020A0F20DE.Visual = Visual;
@@ -9709,8 +9706,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.PBI_CV_996C8E45_0D05_4C52_B0C1_2C020A0F20DE = {
-                name: 'PBI_CV_996C8E45_0D05_4C52_B0C1_2C020A0F20DE',
+            plugins.PBI_CV_996C8E45_0D05_4C52_B0C1_2C020A0F20DE_DEBUG = {
+                name: 'PBI_CV_996C8E45_0D05_4C52_B0C1_2C020A0F20DE_DEBUG',
                 displayName: 'My Barchart Visual',
                 class: 'Visual',
                 version: '1.0.0',
