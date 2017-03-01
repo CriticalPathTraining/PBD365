@@ -1,8 +1,5 @@
-hist(dataset$Age, 
-     main = "Customer Count by Age",
-     col="lightblue", 
-     border="black",
-     ylab="Customer Count", 
-     xlab="Customer Age",
-     xlim = c(18, 100),
-     breaks=20 )
+barplot(dataset$Sales,        
+        names.arg = dataset$AgeGroup, 
+        ylab = "Sales Revenue",
+        main = "Sales by Customer Age Group", 
+        col = c("red", "yellow","orange",  "green", "blue")) 
