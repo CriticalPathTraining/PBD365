@@ -1,0 +1,22 @@
+﻿{ "name": "My Custom Dataset",
+  "tables": [
+    { "name": "Countries",
+      "columns": [
+        { "name": "Country", "dataType": "string" },
+        { "name": "Population", "dataType": "Int64" },
+        { "name": "Continent", "dataType": "string" } 
+      ] 
+    },
+    { "name": "States",
+      "columns": [
+        { "name": "State", "dataType": "string" },
+        { "name": "Abbreviation", "dataType": "string" },
+        { "name": "Founded", "dataType": "Int64" },
+        { "name": "SquareMiles", "dataType": "Int64" },
+        { "name": "Population", "dataType": "Int64" },
+        { "name": "PopulationDensity", "dataType": "Double" },        
+        { "name": "CapitalCity", "dataType": "string" } 
+      ] 
+    }
+  ]
+}
