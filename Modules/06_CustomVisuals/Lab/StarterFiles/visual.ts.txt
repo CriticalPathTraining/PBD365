@@ -14,7 +14,7 @@ module powerbi.extensibility.visual {
     BarColor?: Fill;
   }
 
-  export class SimpleBarchart implements IVisual {
+  export class Visual implements IVisual {
 
     private svg: d3.Selection<SVGElement>;
     private svgGroupMain: d3.Selection<SVGElement>;

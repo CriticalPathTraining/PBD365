@@ -1,21 +1,47 @@
 {
   "dataRoles": [
-    { "displayName": "Bar Grouping", "name": "myCategory", "kind": "Grouping" },
-    { "displayName": "Bar Measurement", "name": "myMeasure", "kind": "Measure" }
+    {
+      "displayName": "Bar Grouping",
+      "name": "myCategory",
+      "kind": "Grouping"
+    },
+    {
+      "displayName": "Bar Measurement",
+      "name": "myMeasure",
+      "kind": "Measure"
+    }
   ],
-  "dataViewMappings": [ {
-      "conditions": [ {          
-          "myCategory": { "max": 1 },
-          "myMeasure": { "max": 1 }
+  "dataViewMappings": [
+    {
+      "conditions": [
+        {
+          "myCategory": {
+            "max": 1
+          },
+          "myMeasure": {
+            "max": 1
+          }
         }
       ],
       "categorical": {
         "categories": {
-          "for": { "in": "myCategory" },
-          "dataReductionAlgorithm": { "top": {} }
+          "for": {
+            "in": "myCategory"
+          },
+          "dataReductionAlgorithm": {
+            "top": {
+              
+            }
+          }
         },
         "values": {
-          "select": [ { "bind": { "to": "myMeasure" } } ]
+          "select": [
+            {
+              "bind": {
+                "to": "myMeasure"
+              }
+            }
+          ]
         }
       }
     }
@@ -24,9 +50,28 @@
     "barchartProperties": {
       "displayName": "Bar Chart Properties",
       "properties": {
-        "sortBySize": { "displayName": "Sort by Size", "type": { "bool": true } },
-        "barColor":   { "displayName": "Bar Color",    "type": { "fill": { "solid": { "color": true } } } },
-        "fontSize":   { "displayName": "Font Size",    "type": { "integer": true } }
+        "sortBySize": {
+          "displayName": "Sort by Size",
+          "type": {
+            "bool": true
+          }
+        },
+        "barColor": {
+          "displayName": "Bar Color",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "fontSize": {
+          "displayName": "Font Size",
+          "type": {
+            "integer": true
+          }
+        }
       }
     }
   }
