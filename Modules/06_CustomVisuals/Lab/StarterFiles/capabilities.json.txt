@@ -1,13 +1,13 @@
 {
   "dataRoles": [
     {
-      "displayName": "My Category Data",
-      "name": "category",
+      "displayName": "Bar Grouping",
+      "name": "myCategory",
       "kind": "Grouping"
     },
     {
-      "displayName": "My Measure Data",
-      "name": "measure",
+      "displayName": "Bar Measurement",
+      "name": "myMeasure",
       "kind": "Measure"
     }
   ],
@@ -15,26 +15,36 @@
     {
       "conditions": [
         {
-          "category": { "max": 1 },
-          "measure": { "max": 1 }
+          "myCategory": { "max": 1 },
+          "myMeasure": { "max": 1 }
         }
       ],
       "categorical": {
         "categories": {
-          "for": { "in": "category" },
+          "for": { "in": "myCategory" },
           "dataReductionAlgorithm": { "top": {} }
         },
-        "values": { "select": [ { "bind": { "to": "measure" } } ] }
+        "values": {
+          "select": [ { "bind": { "to": "myMeasure" } } ]
+        }
       }
     }
   ],
   "objects": {
-    "colorSelector": {
-      "displayName": "Bar Chart Colors",
+    "barchartProperties": {
+      "displayName": "Bar Chart Properties",
       "properties": {
-        "fill": {
-          "displayName": "Color",
+        "sortBySize": {
+          "displayName": "Sort by Size",
+          "type": { "bool": true }
+        },
+        "barColor": {
+          "displayName": "Bar Color",
           "type": { "fill": { "solid": { "color": true } } }
+        },
+        "fontSize": {
+          "displayName": "Font Size",
+          "type": { "integer": true }
         }
       }
     }
