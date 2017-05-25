@@ -1,0 +1,18 @@
+﻿@if (CustomAuthenticationManager.UserHasAuthentiated()) {
+
+  <ul class="nav navbar-nav navbar-right">
+    <li>
+      @Html.ActionLink("Welcome " + CustomAuthenticationManager.GetUserName() + "!", "Index", "UserInfo")
+    </li>
+    <li>
+      @Html.ActionLink("Sign out", "SignOut", "Account")
+    </li>
+  </ul>
+}
+else {
+
+  <ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink("Sign in", "SignIn", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+  </ul>
+
+}

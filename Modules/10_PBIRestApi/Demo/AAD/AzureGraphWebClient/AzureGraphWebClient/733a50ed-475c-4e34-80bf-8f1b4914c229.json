@@ -1,0 +1,83 @@
+{
+  "appId": "733a50ed-475c-4e34-80bf-8f1b4914c229",
+  "appRoles": [],
+  "availableToOtherTenants": false,
+  "displayName": "Azure Graph Web Client",
+  "errorUrl": null,
+  "groupMembershipClaims": null,
+  "homepage": "https://localhost:44300/",
+  "identifierUris": [
+    "https://cptlabs.onmicrosoft.com/AzureGraphWebClient"
+  ],
+  "keyCredentials": [],
+  "knownClientApplications": [],
+  "logoutUrl": null,
+  "oauth2AllowImplicitFlow": false,
+  "oauth2AllowUrlPathMatching": false,
+  "oauth2Permissions": [
+    {
+      "adminConsentDescription": "Allow the application to access AzureGraphWebClient on behalf of the signed-in user.",
+      "adminConsentDisplayName": "Access AzureGraphWebClient",
+      "id": "31329fff-d8b8-4f2b-8809-146659b2a5c3",
+      "isEnabled": true,
+      "type": "User",
+      "userConsentDescription": "Allow the application to access AzureGraphWebClient on your behalf.",
+      "userConsentDisplayName": "Access AzureGraphWebClient",
+      "value": "user_impersonation"
+    }
+  ],
+  "oauth2RequirePostResponse": false,
+  "passwordCredentials": [
+    {
+      "customKeyIdentifier": null,
+      "endDate": "2016-09-09T18:38:07.5536343Z",
+      "keyId": "55b5a523-bc67-41ff-8fde-05f1d09c4d69",
+      "startDate": "2015-09-09T18:38:07.5536343Z",
+      "value": null
+    }
+  ],
+  "publicClient": false,
+  "replyUrls": [
+    "https://localhost:44300/"
+  ],
+  "requiredResourceAccess": [
+    {
+      "resourceAppId": "00000002-0000-0000-c000-000000000000",
+      "resourceAccess": [
+        {
+          "id": "1138cb37-bd11-4084-a2b7-9f71582aeddb",
+          "type": "Role"
+        },
+        {
+          "id": "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175",
+          "type": "Role,Scope"
+        },
+        {
+          "id": "5778995a-e1bf-45b8-affa-663a9f3f4d04",
+          "type": "Role,Scope"
+        },
+        {
+          "id": "a42657d6-7f20-40e3-b6f0-cee03008a62a",
+          "type": "Scope"
+        },
+        {
+          "id": "311a71cc-e848-46a1-bdf8-97ff7156d8e6",
+          "type": "Scope"
+        }
+      ]
+    }
+  ],
+  "samlMetadataUrl": null,
+  "extensionProperties": [],
+  "objectType": "Application",
+  "objectId": "9442b87e-9835-42f2-9d5d-656fd78d2b51",
+  "deletionTimestamp": null,
+  "createdOnBehalfOf": null,
+  "createdObjects": [],
+  "manager": null,
+  "directReports": [],
+  "members": [],
+  "memberOf": [],
+  "owners": [],
+  "ownedObjects": []
+}

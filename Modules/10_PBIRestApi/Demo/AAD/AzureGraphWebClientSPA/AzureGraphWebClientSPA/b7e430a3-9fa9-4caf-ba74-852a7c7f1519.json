@@ -1,0 +1,71 @@
+{
+  "appId": "b7e430a3-9fa9-4caf-ba74-852a7c7f1519",
+  "appRoles": [],
+  "availableToOtherTenants": false,
+  "displayName": "Azure Graph Web Client SPA",
+  "errorUrl": null,
+  "groupMembershipClaims": null,
+  "homepage": "https://localhost:44300/",
+  "identifierUris": [
+    "https://cptlabs.onmicrosoft.com/AzureGraphWebClientSPA"
+  ],
+  "keyCredentials": [],
+  "knownClientApplications": [],
+  "logoutUrl": null,
+  "oauth2AllowImplicitFlow": true,
+  "oauth2AllowUrlPathMatching": false,
+  "oauth2Permissions": [
+    {
+      "adminConsentDescription": "Allow the application to access Azure Graph Web Client SPA on behalf of the signed-in user.",
+      "adminConsentDisplayName": "Access Azure Graph Web Client SPA",
+      "id": "a382e0dc-cd7b-4896-a6b8-dc612f875a25",
+      "isEnabled": true,
+      "type": "User",
+      "userConsentDescription": "Allow the application to access Azure Graph Web Client SPA on your behalf.",
+      "userConsentDisplayName": "Access Azure Graph Web Client SPA",
+      "value": "user_impersonation"
+    }
+  ],
+  "oauth2RequirePostResponse": false,
+  "passwordCredentials": [],
+  "publicClient": null,
+  "replyUrls": [
+    "https://localhost:44300/"
+  ],
+  "requiredResourceAccess": [
+    {
+      "resourceAppId": "00000002-0000-0000-c000-000000000000",
+      "resourceAccess": [
+        {
+          "id": "a42657d6-7f20-40e3-b6f0-cee03008a62a",
+          "type": "Scope"
+        },
+        {
+          "id": "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175",
+          "type": "Scope"
+        },
+        {
+          "id": "5778995a-e1bf-45b8-affa-663a9f3f4d04",
+          "type": "Scope"
+        },
+        {
+          "id": "311a71cc-e848-46a1-bdf8-97ff7156d8e6",
+          "type": "Scope"
+        }
+      ]
+    }
+  ],
+  "samlMetadataUrl": null,
+  "extensionProperties": [],
+  "objectType": "Application",
+  "objectId": "4301ec32-adf7-48f9-96f0-8780ec328102",
+  "deletionTimestamp": null,
+  "createdOnBehalfOf": null,
+  "createdObjects": [],
+  "manager": null,
+  "directReports": [],
+  "members": [],
+  "memberOf": [],
+  "owners": [],
+  "ownedObjects": []
+}

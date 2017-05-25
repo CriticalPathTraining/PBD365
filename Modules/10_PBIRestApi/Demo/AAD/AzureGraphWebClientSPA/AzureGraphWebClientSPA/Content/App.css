@@ -1,0 +1,70 @@
+﻿#content-box{
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+h3{
+  margin-top: 8px;
+  font-size: 1.35em;
+  color: darkblue;
+}
+
+h4{
+  margin-top: 12px;
+  font-size: 1.2em;
+  color: darkblue;
+}
+
+#control_panel{
+  border: 1px solid black;
+  padding: 12px;
+  
+}
+
+#login {
+ margin-top: 8px;
+}
+
+.callout-panel {
+  margin: 8px;
+  padding: 8px;
+  padding-top: 12px;
+  border: 1px solid #444;
+  font-size: 0.8em;
+}
+
+
+.dl-horizontal {
+  margin: 8px;
+  padding: 8px;
+  border: 1px solid #444;
+  background-color: #CCC;
+  font-size: 0.8em;
+}
+
+
+  .dl-horizontal dt {
+    color: #444;
+    margin: 4px;
+    padding: 2px;
+    padding-right: 6px;
+    width: 148px;
+    font-weight: normal;
+  }
+
+  .dl-horizontal dd {
+    background-color: white;
+    margin: 2px;
+    margin-left: 150px;
+    border: 1px solid #444;
+    padding: 4px;
+    padding-left: 8px;
+    color: black;
+    font-weight: bold;
+  }
+
+
+ .dl-horizontal dd:before, .dl-horizontal dd:after  {
+  content: "";
+  display: inline-block;
+}

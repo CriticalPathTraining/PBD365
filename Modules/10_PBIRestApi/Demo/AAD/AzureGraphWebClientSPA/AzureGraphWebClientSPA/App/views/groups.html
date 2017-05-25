@@ -1,0 +1,28 @@
+﻿
+<div id="control_panel">
+  <a href="#/addGroup" class="btn btn-default"  >Create New Group</a>
+</div>
+
+
+<h3>Groups in Current Tenancy</h3>
+
+<div class="row">
+  <table class="table table-striped table-bordered table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>Display Name</th>
+        <th>Email</th>
+        <th>Group Type</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-ng-repeat="group in groups">
+        <td>{{group.displayName}}</td>
+        <td>{{group.mail}}</td>
+        <td>{{(group.groupType!=null) ? group.groupType : "Security" }}</td>
+        <td><a target="_blank" href="https://microsoft.graph.com/beta/myOrganization/groups/{{group.objectId}}">View</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

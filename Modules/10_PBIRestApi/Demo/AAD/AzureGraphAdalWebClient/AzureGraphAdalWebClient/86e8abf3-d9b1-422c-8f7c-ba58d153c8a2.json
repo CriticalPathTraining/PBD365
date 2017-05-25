@@ -1,0 +1,87 @@
+{
+  "appId": "86e8abf3-d9b1-422c-8f7c-ba58d153c8a2",
+  "appRoles": [ ],
+  "availableToOtherTenants": false,
+  "displayName": "Azure Graph Simple Web Client",
+  "errorUrl": null,
+  "groupMembershipClaims": null,
+  "homepage": "https://localhost:44300/",
+  "identifierUris": [
+    "https://CptLabs.onMicrosoft.com/AzureGraphSimpleWebClient"
+  ],
+  "keyCredentials": [
+    {
+      "customKeyIdentifier": "5a4NJBbX1feN3RTOIkPebLfWVS4=",
+      "keyId": "0314676d-c384-4391-b1c4-3b8586ffa457",
+      "type": "AsymmetricX509Cert",
+      "usage": "Verify",
+      "value": "MIIDJjCCAhKgAwIBAgIQyZiMTZQXSqhMX5mzagBFWzAJBgUrDgMCHQUAMCUxIzAhBgNVBAMTGkFwcE9ubHlDbGllbnRDZXJ0aWZpY2F0ZTAxMB4XDTE1MDkxMDA0MDAwMFoXDTE3MDkxMDA0MDAwMFowJTEjMCEGA1UEAxMaQXBwT25seUNsaWVudENlcnRpZmljYXRlMDEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCZiZJMeyEkdSjuNKw0wpA7bWSJSOVGDfv5/lnGoKB5jKWvYuhEID//wVlEYouvSoVzWx0uJ4sUA1nz/756L6wcERRETI6I5ooWpl8GfO4ZzvssNxiPZvVQmCF20gtNkTv7uekZnjY7UIGt0R5zMTM7reqIg9WRmjKae7vxB4AN2qzIYWEgnjYhLnHKdtpzlfs89AD/pgklktb8zOi8ILk7uGeiE3fLTPIZE7NTplX6ddAXQr2u6St4RV0fjM3QnOGxGA8WxxGLNpvnpcJH9L2qQP1euZ4kABGEWJuuz1w5U0fJOLMUo01wLPiDfXT8h++B1nLIwgC7RWbHOnLkhWTHAgMBAAGjWjBYMFYGA1UdAQRPME2AEAUHwOA1nRtZA9T6kArEcbShJzAlMSMwIQYDVQQDExpBcHBPbmx5Q2xpZW50Q2VydGlmaWNhdGUwMYIQyZiMTZQXSqhMX5mzagBFWzAJBgUrDgMCHQUAA4IBAQAwZsibqhHMrL5EWkPU96BZf9KC0WjZkqHfOxlGRtZpRsUYotkOEgCQsgKJpyyQKohlFLTi8Z3cJCr1uaByXMej6fzqn0OtYlZK+a6foX0VMCyI5aC28+khBIg/s6ciiKmFRE8W5qDBmzY5GCzOAWLX5yh+0ISS7f+daUEMaMKa498oRkRzDctXgD8T4RIQpckuHQi3Hw1bTjOnPQ2naKsyXk7/M4aAS6rOvhtQBceI1E174wYrL9CiZKbCiwhsyRmb9QPc8czig32T0HQ9Hb0yUU/RR6qX0DhZ+7Fu3+zKHkWCyj9mD2hUM++tZ5u5Opzwp3fDOfZ4bmQVH8nKOI0d"
+    }
+  ],
+  "knownClientApplications": [ ],
+  "logoutUrl": null,
+  "oauth2AllowImplicitFlow": false,
+  "oauth2AllowUrlPathMatching": false,
+  "oauth2Permissions": [
+    {
+      "adminConsentDescription": "Allow the application to access Azure Graph Simple Web Client on behalf of the signed-in user.",
+      "adminConsentDisplayName": "Access Azure Graph Simple Web Client",
+      "id": "76a0714f-88b9-4080-be95-35f6d365ed52",
+      "isEnabled": true,
+      "type": "User",
+      "userConsentDescription": "Allow the application to access Azure Graph Simple Web Client on your behalf.",
+      "userConsentDisplayName": "Access Azure Graph Simple Web Client",
+      "value": "user_impersonation"
+    }
+  ],
+  "oauth2RequirePostResponse": false,
+  "passwordCredentials": [
+    {
+      "customKeyIdentifier": null,
+      "endDate": "2016-09-09T19:24:49.3003719Z",
+      "keyId": "a229bb23-1877-42a1-8fa6-04531ac7d0ec",
+      "startDate": "2015-09-09T19:24:49.3003719Z",
+      "value": null
+    }
+  ],
+  "publicClient": null,
+  "replyUrls": [
+    "https://localhost:44300/"
+  ],
+  "requiredResourceAccess": [
+    {
+      "resourceAppId": "00000002-0000-0000-c000-000000000000",
+      "resourceAccess": [
+        {
+          "id": "a42657d6-7f20-40e3-b6f0-cee03008a62a",
+          "type": "Scope"
+        },
+        {
+          "id": "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175",
+          "type": "Scope"
+        },
+        {
+          "id": "5778995a-e1bf-45b8-affa-663a9f3f4d04",
+          "type": "Scope"
+        },
+        {
+          "id": "311a71cc-e848-46a1-bdf8-97ff7156d8e6",
+          "type": "Scope"
+        }
+      ]
+    }
+  ],
+  "samlMetadataUrl": null,
+  "extensionProperties": [ ],
+  "objectType": "Application",
+  "objectId": "f9750e28-767e-4252-831b-c8d06a95c9ff",
+  "deletionTimestamp": null,
+  "createdOnBehalfOf": null,
+  "createdObjects": [ ],
+  "manager": null,
+  "directReports": [ ],
+  "members": [ ],
+  "memberOf": [ ],
+  "owners": [ ],
+  "ownedObjects": [ ]
+}

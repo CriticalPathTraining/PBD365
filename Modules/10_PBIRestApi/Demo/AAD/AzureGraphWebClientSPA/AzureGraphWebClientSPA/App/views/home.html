@@ -1,0 +1,18 @@
+﻿<div class="row">
+
+  <h3>Demo Home Page</h3>
+
+  <div ng-hide="userInfo.isAuthenticated" class="alert alert-danger" >
+    <h4>The user has not logged in.</h4>
+    <p>Click <b>Login</b> link in the upper right corner to begin the user login process with Azure Active Directory.</p>
+  </div>
+
+
+  <div ng-show="userInfo.isAuthenticated" class="alert alert-success" >
+    <p>The user is now logged in. Click the links in the toolbar above to make 
+      Users is now logged in. Click the the links above to demonstrate this SPA.    
+    </p>    
+  </div>
+
+
+</div>

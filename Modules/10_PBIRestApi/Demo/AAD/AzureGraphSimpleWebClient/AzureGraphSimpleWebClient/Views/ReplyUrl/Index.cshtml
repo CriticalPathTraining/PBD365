@@ -1,0 +1,60 @@
+﻿@model AzureGraphSimpleWebClient.Models.JsonWebToken
+
+<h2>JSON Web Token</h2>
+
+<table class="table table-bordered" style="font-size:small;">
+  <tr>
+    <td style="width:200px;">Token Type</td>
+    <td>@Model.token_type</td>
+  </tr>
+  <tr>
+    <td>Resource</td>
+    <td>@Model.resource</td>
+  </tr>
+  <tr>
+    <td>Scope</td>
+    <td>@Model.scope</td>
+  </tr>
+  <tr>
+    <td>Not Before</td>
+    <td>@Model.not_before</td>
+  </tr>
+  <tr>
+    <td>Expires In</td>
+    <td>@Model.expires_in</td>
+  </tr>
+  <tr>
+    <td>Expires On</td>
+    <td>@Model.expires_on</td>
+  </tr>
+  <tr>
+    <td>Id Token</td>
+    <td>
+      <dd style="font-size:0.7em;line-break:loose;word-break:break-all;background-color:#ddd;border: #AAA 1px solid; padding: 4px;margin-top:8px;">
+        @Model.id_token
+      </dd>
+    </td>
+  </tr>
+  <tr>
+    <td>Access Token</td>
+    <td>
+      <dd style="font-size:0.7em;line-break:loose;word-break:break-all;background-color:#ddd;border: #AAA 1px solid; padding: 4px;margin-top:8px;">
+        @Model.access_token
+      </dd>
+    </td>
+  </tr>
+  <tr>
+    <td>Refresh Token</td>
+    <td>
+      <dd style="font-size:0.7em;line-break:loose;word-break:break-all;background-color:#ddd;border: #AAA 1px solid; padding: 4px;margin-top:8px;">
+        @Model.refresh_token
+      </dd>
+    </td>
+  </tr>
+
+
+</table>
+
+
+  </dl>
+</div>

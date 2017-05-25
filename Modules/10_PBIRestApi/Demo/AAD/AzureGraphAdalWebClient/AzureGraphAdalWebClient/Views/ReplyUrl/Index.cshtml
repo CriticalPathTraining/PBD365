@@ -1,0 +1,83 @@
+﻿@model Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult
+
+<div class="row">
+
+  <div class="col-md-6">
+    <h3>User Info</h3>
+    <table class="table table-bordered">
+      <tr>
+        <td style="width:120px;">Unique ID</td>
+        <td>@Model.UserInfo.UniqueId</td>
+      </tr>
+      <tr>
+        <td>Displayable ID</td>
+        <td>@Model.UserInfo.DisplayableId</td>
+      </tr>
+      <tr>
+        <td>Given Name</td>
+        <td>@Model.UserInfo.GivenName</td>
+      </tr>
+      <tr>
+        <td>Family Name</td>
+        <td>@Model.UserInfo.FamilyName</td>
+      </tr>
+
+    </table>
+
+  </div>
+
+  <div class="col-md-6">
+    <h3>Token Info</h3>
+    <table class="table table-bordered">
+      <tr>
+        <td style="width:220px;">Tenant ID</td>
+        <td>@Model.TenantId</td>
+      </tr>
+      <tr>
+        <td>Access Token Expires</td>
+        <td>@Model.ExpiresOn.DateTime.ToLocalTime().ToShortTimeString() on @Model.ExpiresOn.DateTime.ToLocalTime().ToLongDateString()</td>
+      </tr>
+      <tr>
+        <td>Access Token Type</td>
+        <td>@Model.AccessTokenType</td>
+      </tr>
+      <tr>
+        <td>Is Multiple Resource Refresh Token</td>
+        <td>@Model.IsMultipleResourceRefreshToken.ToString()</td>
+      </tr>
+    </table>
+
+  </div>
+  </div>
+
+<div class="row">
+
+  <div class="col-md-12">
+    <h3>ID Token</h3>
+    <div class="TokenFormatting">
+      @Model.IdToken
+    </div>  
+  </div>
+  
+  <div class="col-md-12">
+    <h3>Access Token</h3>
+    <div class="TokenFormatting">
+      @Model.AccessToken
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <h3>Refresh Token</h3>
+    <div class="TokenFormatting">
+      @Model.RefreshToken
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <h3>Authentication Code</h3>
+    <div class="TokenFormatting">
+      @ViewBag.AuthenticationCode
+    </div>
+  </div>
+
+</div>
