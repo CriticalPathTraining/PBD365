@@ -24,3 +24,16 @@ C:\Demo\CampaignContributions\CampaignContributions\obj\Debug\CampaignContributi
 C:\Demo\CampaignContributions\CampaignContributions\obj\Debug\CampaignContributions.Properties.Resources.resources
 C:\Demo\CampaignContributions\CampaignContributions\obj\Debug\CampaignContributions.csproj.GenerateResource.Cache
 C:\Demo\CampaignContributions\CampaignContributions\bin\Debug\Newtonsoft.Json.dll
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\bin\Debug\CampaignContributions.exe.config
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\bin\Debug\CampaignContributions.exe
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\bin\Debug\CampaignContributions.pdb
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\bin\Debug\Newtonsoft.Json.dll
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.xml
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\bin\Debug\Newtonsoft.Json.xml
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\obj\Debug\CampaignContributions.csprojResolveAssemblyReference.cache
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\obj\Debug\CampaignContributions.Properties.Resources.resources
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\obj\Debug\CampaignContributions.csproj.GenerateResource.Cache
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\obj\Debug\CampaignContributions.exe
+C:\GIT\PBD365\Modules\10_PBIRestApi\Demo\CampaignContributions\CampaignContributions\obj\Debug\CampaignContributions.pdb

@@ -104,7 +104,7 @@ namespace PBIEmbeddedDemo_Provisioning {
 
       Console.WriteLine();
       Console.WriteLine("Updating security credentials for Azure SQL Data Source...");
-      UpdateAzureSqlDataSource(workspaceCollectionName, workspace.WorkspaceId, importedReportId);
+      //UpdateAzureSqlDataSource(workspaceCollectionName, workspace.WorkspaceId, importedReportId);
 
       Console.WriteLine();
       Console.WriteLine("All work has been completed.");

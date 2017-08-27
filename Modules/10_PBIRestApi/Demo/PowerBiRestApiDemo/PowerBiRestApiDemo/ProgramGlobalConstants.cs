@@ -12,8 +12,8 @@ namespace PowerBiRestApiDemo {
     public const string PowerBiServiceResourceUri = "https://analysis.windows.net/powerbi/api";
     public const string PowerBiServiceRootUrl = "https://api.powerbi.com/v1.0/myorg/";
 
-    public const string ClientID = "bc6b8f66-390b-4ad5-9dc6-9637f7f9841f";
-    public const string RedirectUri = "https://localhost/PowerBiRestApiDemo";
+    public const string ClientID = "50812ae2-1437-4f6c-907a-99c349f90003";
+    public const string RedirectUri = "d62b3f32-fc1e-4be5-9fc6-b52141683130";
 
     public const string DatasetName = "My Custom Dataset";
 

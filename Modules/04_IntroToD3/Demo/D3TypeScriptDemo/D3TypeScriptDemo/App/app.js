@@ -61,3 +61,4 @@ var myApp;
     }
     myApp.updateUI = updateUI;
 })(myApp || (myApp = {}));
+//# sourceMappingURL=app.js.map
