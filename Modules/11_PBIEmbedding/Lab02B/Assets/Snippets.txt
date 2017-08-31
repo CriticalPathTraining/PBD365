@@ -1,0 +1,60 @@
+>> Web form: EmbedReport.aspx: Output embed values
+==================================================
+<br />
+<span>Embed Token: </span>
+<textarea cols="120" rows="1" readonly="readonly"><% = this.embedToken %></textarea><br />
+<span>Embed URL: </span>
+<textarea cols="120" rows="1" readonly="readonly"><% = this.embedUrl %></textarea><br />
+<span>Report Id: </span>
+<textarea cols="120" rows="1" readonly="readonly"><% = this.reportId %></textarea><br />
+
+
+>> Sample application URL
+==================================================
+http://pbiembedsamplev3.azurewebsites.net/v2-demo/index.html
+
+
+>> Web form: EmbedDashboard.aspx: FilterRegion dropdown list
+==================================================
+&nbsp;
+<span>Region: </span>
+<select id="ddlFilterRegion" onchange="filterRegion(); return false;">
+	<option selected="selected" value="*">(All Regions)</option>
+	<option value="Midwest">Midwest</option>
+	<option value="New England">New England</option>
+	<option value="Northeast">Northeast</option>
+	<option value="Pacific Northwest">Pacific Northwest</option>
+	<option value="Southern">Southern</option>
+	<option value="Southwest">Southwest</option>
+</select>
+
+
+>> Web form: script element: filterRegion function
+==================================================
+function filterRegion() {
+
+	var report = powerbi.embeds[0];
+	var ddl = document.getElementById("ddlFilterRegion");
+	var region = ddl.options[ddl.selectedIndex].value;
+
+	if (region == "*") {
+		report.removeFilters()
+			.catch(error => { console.log(error); });
+		return;
+	}
+
+	const basicFilter = {
+		"$schema": "http://powerbi.com/product/schema#basic",
+		"target": {
+			"table": "Region",
+			"column": "Region"
+		},
+		"operator": "In",
+		"values": [
+			region
+		]
+	}
+
+	report.setFilters([basicFilter])
+		.catch(error => { console.log(error); });
+}

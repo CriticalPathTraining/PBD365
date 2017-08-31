@@ -1,0 +1,184 @@
+>> Redirect URL
+==================================================
+https://lab.powerbi.com/gettoken
+
+
+>> Install NuGet packages (using Package Manager Console)
+==================================================
+Install-Package Microsoft.PowerBI.Api
+Install-Package Microsoft.IdentityModel.Clients.ActiveDirectory
+
+
+>> Web.config: appSettings
+==================================================
+<appSettings>
+	<add key="authorityUrl" value="https://login.windows.net/common/oauth2/authorize/" />
+	<add key="resourceUrl" value="https://analysis.windows.net/powerbi/api" />
+	<add key="apiUrl" value="https://api.powerbi.com/" />
+	<add key="embedUrlBase" value="https://app.powerbi.com/" />
+	<add key="appWorkspaceId" value="" />
+	<add key="clientId" value="" />
+
+	<!-- Note: Do NOT leave your credentials in clear text. Retrieve them from a secure store. -->
+	<add key="pbiUsername" value="" />
+	<add key="pbiPassword" value="" />
+</appSettings>
+
+
+>> Web form: Dropdown list
+==================================================
+<asp:DropDownList ID="ddlReport" runat="server" AutoPostBack="True" OnSelectedIndexChanged="Page_Load" />
+
+
+>> Web form code: Namespace directive
+==================================================
+using System.Configuration;
+
+
+>> Web form code: Class-level declarations
+==================================================
+private static readonly string AuthorityUrl = ConfigurationManager.AppSettings["authorityUrl"];
+
+private static readonly string ResourceUrl = ConfigurationManager.AppSettings["resourceUrl"];
+private static readonly string ApiUrl = ConfigurationManager.AppSettings["apiUrl"];
+private static readonly string AppWorkspaceId = ConfigurationManager.AppSettings["appWorkspaceId"];
+private static readonly string ClientId = ConfigurationManager.AppSettings["clientId"];
+
+private static readonly string Username = ConfigurationManager.AppSettings["pbiUsername"];
+private static readonly string Password = ConfigurationManager.AppSettings["pbiPassword"];
+
+
+>> Web form code: Namespace directive
+==================================================
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Rest;
+
+
+>> Web form code: Page_Load: Authenticate with AAD
+==================================================
+var credential = new UserPasswordCredential(Username, Password);
+
+// Authenticate using app settings credentials
+var authenticationContext = new AuthenticationContext(AuthorityUrl);
+var authenticationResult = authenticationContext.AcquireTokenAsync(ResourceUrl, ClientId, credential).Result;
+
+var tokenCredentials = new TokenCredentials(authenticationResult.AccessToken, "Bearer");
+
+
+>> Web form code: Namespace directives
+==================================================
+using Microsoft.PowerBI.Api.V2;
+using Microsoft.PowerBI.Api.V2.Models;
+
+
+>> Web form code: Retrieving reports
+==================================================
+if (!IsPostBack)
+{
+	using (var client = new PowerBIClient(new Uri(ApiUrl), tokenCredentials))
+	{
+		// Get a list of reports
+		var reports = client.Reports.GetReportsInGroup(AppWorkspaceId);
+
+		// Populate dropdown list
+		foreach (Report item in reports.Value)
+		{
+			ddlReport.Items.Add(new ListItem(item.Name, item.Id));
+		}
+
+		// Select first item
+		ddlReport.SelectedIndex = 0;
+	}
+}
+
+
+>> Install NuGet package (using Package Manager Console)
+==================================================
+Install-Package Microsoft.PowerBI.JavaScript
+
+
+>> Web form: Script element
+==================================================
+<script src="/scripts/powerbi.js"></script>
+
+
+>> Web form: Replacement div element
+==================================================
+<div id="embedDiv" style="height: 600px; width: 100%; max-width: 1000px;" />
+
+
+>> Web form code: Class-level declarations
+==================================================
+public string embedToken;
+public string embedUrl;
+public string reportId;
+
+
+>> Web form code: Page_Load: Generate embed token
+==================================================
+// Generate an embed token and populate embed variables
+using (var client = new PowerBIClient(new Uri(ApiUrl), tokenCredentials))
+{
+	// Retrieve the selected report
+	var report = client.Reports.GetReportInGroup(AppWorkspaceId, ddlReport.SelectedValue);
+
+	// Generate an embed token to view
+	var generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "view");
+	var tokenResponse = client.Reports.GenerateTokenInGroup(AppWorkspaceId, report.Id, generateTokenRequestParameters);
+
+	// Populate embed variables (to be passed client-side)
+	embedToken = tokenResponse.Token;
+	embedUrl = report.EmbedUrl;
+	reportId = report.Id;
+}
+
+
+>> Web form: Client-side embed script
+==================================================
+<script>
+	// Read embed token
+	var embedToken = "<% =this.embedToken %>";
+
+	// Read embed URL
+	var embedUrl = "<% = this.embedUrl %>";
+
+	// Read report Id
+	var reportId = "<% = this.reportId %>";
+
+	// Get models (models contains enums)
+	var models = window['powerbi-client'].models;
+
+	// Embed configuration is used to describe what and how to embed
+	// This object is used when calling powerbi.embed
+	// It can also includes settings and options such as filters
+	var config = {
+		type: 'report',
+		tokenType: models.TokenType.Embed,
+		accessToken: embedToken,
+		embedUrl: embedUrl,
+		id: reportId,
+		settings: {
+			filterPaneEnabled: true,
+			navContentPaneEnabled: true
+		}
+	};
+
+	// Embed the report within the div element
+	var report = powerbi.embed(embedDiv, config);
+</script>
+
+
+>> Web form: Client-side embed script: Replace settings assignment
+==================================================
+pageView: "actualSize"
+
+
+>> Web form code: Replace dashboard variable assignment
+==================================================
+var dashboard = client.Dashboards.GetDashboardsInGroup(AppWorkspaceId).Value.FirstOrDefault(d => d.Id == ddlDashboard.SelectedValue);
+
+
+>> Default page: Links
+==================================================
+<a href="EmbedReport.aspx">Embed Reports</a><br />
+<a href="EmbedDashboard.aspx">Embed Dashboards</a><br />

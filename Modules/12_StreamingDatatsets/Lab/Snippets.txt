@@ -1,0 +1,53 @@
+>> JSON document: Create dataset
+==================================================
+{
+	"name": "E-Commerce Operations",
+	"tables": [
+		{
+			"name": "Product Browsing",
+			"columns": [
+				{
+					"name": "Product",
+					"dataType": "String"
+				},
+				{
+					"name": "Product Category",
+					"dataType": "String"
+				}
+			]
+		}
+	]
+}
+
+
+>> JSON document: Insert single row
+==================================================
+{
+	"rows": [
+		{
+			"Product": "4CAX-B Helicopter",
+			"Product Category": "Co-Axial"
+		}
+	]
+}
+
+
+>> JSON document: Update table schema
+==================================================
+{
+	"name": "Product Browsing",
+	"columns": [
+		{
+			"name": "Product",
+			"dataType": "String"
+		},
+		{
+			"name": "Product Category",
+			"dataType": "String"
+		},
+		{
+			"name": "Country",
+			"dataType": "String"
+		}
+	]
+}
