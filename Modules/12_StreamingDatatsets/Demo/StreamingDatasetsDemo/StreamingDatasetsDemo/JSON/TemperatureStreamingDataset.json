@@ -1,0 +1,27 @@
+﻿{
+  "name": "@DatasetName",
+  "defaultMode": "Streaming",
+  "tables": [
+    {
+      "name": "Expenses",
+      "columns": [
+        {
+          "name": "Amount",
+          "dataType": "Double"
+        },
+        {
+          "name": "TotalAmount",
+          "dataType": "Double"
+        },
+        {
+          "name": "Budget",
+          "dataType": "Double"
+        },
+        {
+          "name": "MaxAmount",
+          "dataType": "Double"
+        }
+      ]
+    }
+  ]
+}

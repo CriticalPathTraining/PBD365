@@ -1,0 +1,31 @@
+﻿{
+  "name": "@DatasetName",
+  "defaultMode": "Streaming",
+  "tables": [
+    {
+      "name": "TemperatureReadings",
+      "columns": [
+        {
+          "name": "Temperature",
+          "dataType": "Double"
+        },
+        {
+          "name": "TargetTemperature",
+          "dataType": "Double"
+        },
+        {
+          "name": "MaxTemperature",
+          "dataType": "Double"
+        },
+        {
+          "name": "Batch",
+          "dataType": "string"
+        },
+        {
+          "name": "Time",
+          "dataType": "Datetime"
+        }
+      ]
+    }
+  ]
+}

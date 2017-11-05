@@ -1,0 +1,42 @@
+﻿{
+  "name": "@DatasetName",
+  "defaultMode": "Push",
+  "tables": [
+    {
+      "name": "Expenses",
+      "columns": [
+        {
+          "name": "Expense",
+          "dataType": "string"
+        },
+        {
+          "name": "Category",
+          "dataType": "string"
+        },
+        {
+          "name": "Amount",
+          "dataType": "Double",
+          "formatString": "$#,##0.00"
+        },
+        {
+          "name": "Time",
+          "dataType": "Datetime",
+          "formatString": "yyyy\\-mm\\-dd  hh:nn"
+        },
+        {
+          "name": "TimeWindow",
+          "dataType": "string"
+        }
+
+      ],
+      "measures": [
+        {
+          "name": "Total Expenses",
+          "expression": "Sum(Expenses[Amount])",
+          "formatString": "$#,##0"
+        }
+      ]
+
+    }
+  ]
+}

@@ -15,7 +15,8 @@
         },
         {
           "name": "City",
-          "dataType": "string"
+          "dataType": "string",
+          "dataCategory": "Place"
         },
         {
           "name": "State",
