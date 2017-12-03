@@ -1,11 +1,11 @@
 module powerbi.visuals.plugins {
-    export var PBI_CV_063C4F2A_B7C8_4568_9B67_28A7314B0793_DEBUG = {
-        name: 'PBI_CV_063C4F2A_B7C8_4568_9B67_28A7314B0793_DEBUG',
+    export var viz036AA74B9636F64A41BDDEDBE7676FC51B_DEBUG = {
+        name: 'viz036AA74B9636F64A41BDDEDBE7676FC51B_DEBUG',
         displayName: 'viz03',
         class: 'Visual',
         version: '1.0.0',
-        apiVersion: '1.5.0',
-        create: (options: extensibility.visual.VisualConstructorOptions) => new powerbi.extensibility.visual.PBI_CV_063C4F2A_B7C8_4568_9B67_28A7314B0793.Visual(options),
+        apiVersion: '1.9.0',
+        create: (options: extensibility.visual.VisualConstructorOptions) => new powerbi.extensibility.visual.viz036AA74B9636F64A41BDDEDBE7676FC51B.Visual(options),
         custom: true
     };
 }

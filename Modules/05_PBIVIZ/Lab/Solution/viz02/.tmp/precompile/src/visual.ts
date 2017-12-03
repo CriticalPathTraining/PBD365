@@ -1,36 +1,36 @@
-module powerbi.extensibility.visual.PBI_CV_75DE18A7_A280_4405_AC95_921191D07CCD  {
-
-    export class Visual implements IVisual {
-
-        private container: JQuery;
-
-        constructor(options: VisualConstructorOptions) {
-            this.container = $(options.element);
-        }
-
-        public update(options: VisualUpdateOptions) {
-
-            var table: JQuery = $("<table>", {"id": "myTable"})
-                .append( $("<tr>")
-                .append( $("<td>").text("Width") )
-                .append( $("<td>").text(options.viewport.width.toFixed(0))
-                ))         
-                .append( $("<tr>")
-                .append( $("<td>").text("Height") )
-                .append( $("<td>").text(options.viewport.height.toFixed(0))
-                )
-            );
-
-            var scaledFontSizeWidth: number = Math.round(options.viewport.width / 7);
-            var scaledFontSizeHeight: number = Math.round(options.viewport.height / 5);
-            var scaledFontSize: number = Math.min(...[scaledFontSizeWidth, scaledFontSizeHeight]);
-            var scaledFontSizeCss: string = scaledFontSize + "px";
-
-            $("td", table).css({
-                "font-size": scaledFontSizeCss
-            });
-
-            this.container.empty().append(table);
+module powerbi.extensibility.visual.viz0200A9F84AED73453DA9150E9CEDDD0E30  {
+    
+        export class Visual implements IVisual {
+    
+            private container: JQuery;
+    
+            constructor(options: VisualConstructorOptions) {
+                this.container = $(options.element);
+            }
+    
+            public update(options: VisualUpdateOptions) {
+    
+                var table: JQuery = $("<table>", {"id": "myTable"})
+                    .append( $("<tr>")
+                    .append( $("<td>").text("Width") )
+                    .append( $("<td>").text(options.viewport.width.toFixed(0))
+                    ))         
+                    .append( $("<tr>")
+                    .append( $("<td>").text("Height") )
+                    .append( $("<td>").text(options.viewport.height.toFixed(0))
+                    )
+                );
+    
+                var scaledFontSizeWidth: number = Math.round(options.viewport.width / 7);
+                var scaledFontSizeHeight: number = Math.round(options.viewport.height / 5);
+                var scaledFontSize: number = Math.min(...[scaledFontSizeWidth, scaledFontSizeHeight]);
+                var scaledFontSizeCss: string = scaledFontSize + "px";
+    
+                $("td", table).css({
+                    "font-size": scaledFontSizeCss
+                });
+    
+                this.container.empty().append(table);
+            }
         }
     }
-}

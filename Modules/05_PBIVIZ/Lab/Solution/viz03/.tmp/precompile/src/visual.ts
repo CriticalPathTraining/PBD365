@@ -1,5 +1,5 @@
 
-module powerbi.extensibility.visual.PBI_CV_063C4F2A_B7C8_4568_9B67_28A7314B0793  {
+module powerbi.extensibility.visual.viz036AA74B9636F64A41BDDEDBE7676FC51B  {
     export class Visual implements IVisual {
 
         private svgRoot: d3.Selection<SVGElementInstance>;
