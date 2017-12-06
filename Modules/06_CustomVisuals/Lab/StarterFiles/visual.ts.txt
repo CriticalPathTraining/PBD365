@@ -150,7 +150,7 @@ module powerbi.extensibility.visual {
         .exit()
         .remove();
 
-      $(".axis text").css({ "font-size": viewModel.FontSize });
+      d3.select(".axis text").style({ "font-size": viewModel.FontSize });
 
     }
 
