@@ -1,31 +1,19 @@
-﻿{
+﻿ {
   "name": "@DatasetName",
   "defaultMode": "PushStreaming",
   "tables": [
-    {
-      "name": "TemperatureReadings",
+    { "name": "TemperatureReadings",
       "columns": [
-        {
-          "name": "Temperature",
-          "dataType": "Double"
-        },
-        {
-          "name": "TargetTemperature",
-          "dataType": "Double"
-        },
-        {
-          "name": "MaxTemperature",
-          "dataType": "Double"
-        },
-        {
-          "name": "Batch",
-          "dataType": "string"
-        },
-        {
-          "name": "Time",
-          "dataType": "Datetime"
-        }
+        { "name": "Run", "dataType": "string" },
+        { "name": "Time", "dataType": "Datetime" },
+        { "name": "TimeWindow", "dataType": "string" },
+        { "name": "TargetTemperature", "dataType": "Double" },
+        { "name": "MinTemperature", "dataType": "Double" },
+        { "name": "MaxTemperature", "dataType": "Double" },
+        { "name": "BatchA", "dataType": "Double" },
+        { "name": "BatchB", "dataType": "Double" },
+        { "name": "BatchC", "dataType": "Double" }
       ]
     }
   ]
-}
+} 

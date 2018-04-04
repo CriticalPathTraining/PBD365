@@ -7,6 +7,7 @@ using System.Threading;
 
 using Newtonsoft.Json;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using StreamingDatasetsDemo.Models;
 
 namespace StreamingDatasetsDemo {
 
@@ -15,8 +16,9 @@ namespace StreamingDatasetsDemo {
     public const string AzureAuthorizationEndpoint = "https://login.microsoftonline.com/common";
     public const string PowerBiServiceResourceUri = "https://analysis.windows.net/powerbi/api";
     public const string PowerBiServiceRootUrl = "https://api.powerbi.com/v1.0/myorg/";
+    public const string restUrlDatasets = PowerBiServiceRootUrl + "datasets";
 
-    public const string ClientID = "bbc4bbc1-ca57-4bb0-a996-4228f49fd09b";
+    public const string ClientID = "[YOUR_CLIENT_ID]";
     public const string RedirectUri = "https://localhost/app1234";
 
     #region "Authentication Details"
@@ -29,16 +31,16 @@ namespace StreamingDatasetsDemo {
       var authenticationContext = new AuthenticationContext(AzureAuthorizationEndpoint);
 
       //// use authentication context to trigger user sign-in and return access token 
-      //var userAuthnResult = authenticationContext.AcquireTokenAsync(PowerBiServiceResourceUri,
-      //                                                         ClientID,
-      //                                                         new Uri(RedirectUri),
-      //                                                         new PlatformParameters(PromptBehavior.Auto)).Result;
-
-      // use authentication context to trigger user sign-in and return access token 
-      UserPasswordCredential creds = new UserPasswordCredential("Student@cpt0828.onMicrosoft.com", "Pa$$word!");
       var userAuthnResult = authenticationContext.AcquireTokenAsync(PowerBiServiceResourceUri,
                                                                ClientID,
-                                                               creds).Result;
+                                                               new Uri(RedirectUri),
+                                                               new PlatformParameters(PromptBehavior.Auto)).Result;
+
+      // use authentication context to trigger user sign-in and return access token 
+      //UserPasswordCredential creds = new UserPasswordCredential("MyAccount@MyDomain.onMicrosoft.com", "MyPassword");
+      //var userAuthnResult = authenticationContext.AcquireTokenAsync(PowerBiServiceResourceUri,
+      //                                                         ClientID,
+      //                                                         creds).Result;
 
 
       // cache access token in AccessToken field
@@ -132,8 +134,150 @@ namespace StreamingDatasetsDemo {
       return string.Empty;
     }
 
+    public void CreateDemoStreamingDataset(string DatasetName) {
+      ThreadStart ts = new ThreadStart(() => CreateDemoStreamingDatasetTask(DatasetName));
+      Thread t = new Thread(ts);
+      t.Start();
+    }
+
+    public void CreateDemoStreamingDatasetTask(string DatasetName) {
+
+      // check to see if dataset exists
+      string DatasetId = GetDatasetId(DatasetName);
+      if (string.IsNullOrEmpty(DatasetId)) {
+        Console.WriteLine("Creating new Dataset: " + DatasetName + "...");
+        // create dataet if it does not exist
+        string jsonNewDataset = Properties.Resources.DemoStreamingDataset.Replace("@DatasetName", DatasetName);
+        // execute REST call to create new dataset
+        string json = ExecutePostRequest(restUrlDatasets, jsonNewDataset);
+        // retrieve Guid to track dataset ID
+        Dataset dataset = JsonConvert.DeserializeObject<Dataset>(json);
+        // get Dataset ID once it has been created
+        DatasetId = GetDatasetId(DatasetName);
+      }
+
+      PushTemperatureRows(DatasetId);
+
+    }
+
+    public void CreateDemoHybridDataset(string DatasetName) {
+      ThreadStart ts = new ThreadStart(() => CreateDemoHybridDatasetTask(DatasetName));
+      Thread t = new Thread(ts);
+      t.Start();
+    }
+
+    public void CreateDemoHybridDatasetTask(string DatasetName) {
+
+      // check to see if dataset exists
+      string DatasetId = GetDatasetId(DatasetName);
+      if (string.IsNullOrEmpty(DatasetId)) {
+        Console.WriteLine("Creating new Dataset: " + DatasetName + "...");
+        // create dataet if it does not exist
+        string jsonNewDataset = Properties.Resources.DemoHybridDataset.Replace("@DatasetName", DatasetName);
+        // execute REST call to create new dataset
+        string json = ExecutePostRequest(restUrlDatasets, jsonNewDataset);
+        // retrieve Guid to track dataset ID
+        Dataset dataset = JsonConvert.DeserializeObject<Dataset>(json);
+        // get Dataset ID once it has been created
+        DatasetId = GetDatasetId(DatasetName);
+      }
+      else {
+        // if dataset exists, delete all existing table rows
+        string restUrlTemperatureReadingsTableRows = string.Format("{0}/{1}/tables/TemperatureReadings/rows", restUrlDatasets, DatasetId);
+        ExecuteDeleteRequest(restUrlTemperatureReadingsTableRows);
+      }
+
+      PushTemperatureRows(DatasetId);
+
+    }
+
+    public void PushTemperatureRows(string DatasetId) {
+      int RunCount = 1;
+      string RunName = "Run " + RunCount.ToString("00");
+      double temperatureBatchA = 100;
+      double temperatureBatchB = 100;
+      double temperatureBatchC = 100;
+      Random rand = new Random(714);
+
+      Boolean tempOnTheRise = true;
+      Boolean inTransition = false;
+      int transitionCounter = 0;
+
+      while (true) {
+
+        if (inTransition) {
+          transitionCounter += 1;
+          int transitionCountMax = tempOnTheRise ? 15 : 3;
+          if (transitionCounter >= transitionCountMax) {
+            inTransition = false;
+            transitionCounter = 0;
+          }
+        }
+        else {
+          if (tempOnTheRise) {
+            temperatureBatchA += rand.Next(-40, 380) / (double)100;
+            if (temperatureBatchA > 212) { temperatureBatchA = 212; }
+            temperatureBatchB += rand.Next(0, 340) / (double)100;
+            if (temperatureBatchB > 212) { temperatureBatchB = 212; }
+            temperatureBatchC += rand.Next(20, 332) / (double)100;
+            if (temperatureBatchC > 212) { temperatureBatchC = 212; }
+            if (temperatureBatchA == 212 && temperatureBatchB == 212 && temperatureBatchC == 212) {
+              tempOnTheRise = false;
+              inTransition = true;
+            }
+          }
+          else {
+            temperatureBatchA -= rand.Next(0, 1020) / (double)100;
+            if (temperatureBatchA < 100) { temperatureBatchA = 100; }
+            temperatureBatchB -= rand.Next(100, 980) / (double)100;
+            if (temperatureBatchB < 100) { temperatureBatchB = 100; }
+            temperatureBatchC -= rand.Next(200, 1300) / (double)100;
+            if (temperatureBatchC < 100) { temperatureBatchC = 100; }
+            if (temperatureBatchA == 100 && temperatureBatchB == 100 && temperatureBatchC == 100) {
+              tempOnTheRise = true;
+              inTransition = true;
+              RunCount += 1;
+              RunName = "Run " + RunCount.ToString("00");
+            }
+          }
+        }
+
+        string currentTimeWindow = DateTime.Now.Hour.ToString("00") + ":" +
+                                  DateTime.Now.Minute.ToString("00") + ":" +
+                                  ((DateTime.Now.Second / 15) * 15).ToString("00");
+
+
+        TemperatureReadingsRow row = new TemperatureReadingsRow {
+          Run = RunName,
+          Time = DateTime.Now,
+          TimeWindow = currentTimeWindow,
+          TargetTemperature = 212,
+          MinTemperature = 100,
+          MaxTemperature = 250,
+          BatchA = temperatureBatchA,
+          BatchB = temperatureBatchB,
+          BatchC = temperatureBatchC,
+        };
+
+        TemperatureReadingsRow[] rows = { row };
+        TemperatureReadingsRows temperatureReadingsRows = new TemperatureReadingsRows { rows = rows };
+        string jsonNewRows = JsonConvert.SerializeObject(temperatureReadingsRows);
+        string restUrlTargetTableRows = string.Format("{0}/{1}/tables/TemperatureReadings/rows", restUrlDatasets, DatasetId);
+        string jsonResultAddExpenseRows = ExecutePostRequest(restUrlTargetTableRows, jsonNewRows);
+        Console.Write(".");
+        Thread.Sleep(500);
+      }
+    }
+
     public void CreateDemoPushDataset(string DatasetName) {
+      ThreadStart ts = new ThreadStart(() => CreateDemoPushDatasetTask(DatasetName));
+      Thread t = new Thread(ts);
+      t.Start();
+    }
+
+    public void CreateDemoPushDatasetTask(string DatasetName) {
       string restUrlDatasets = PowerBiServiceRootUrl + "datasets";
+      string restUrlContributionsTableRows;
 
       // check to see if dataset exists
       string DatasetId = GetDatasetId(DatasetName);
@@ -145,203 +289,88 @@ namespace StreamingDatasetsDemo {
         // retrieve Guid to track dataset ID
         Dataset dataset = JsonConvert.DeserializeObject<Dataset>(json);
         DatasetId = GetDatasetId(DatasetName);
+        restUrlContributionsTableRows = string.Format("{0}/{1}/tables/Contributions/rows", restUrlDatasets, DatasetId);
+        // populate lookup tables
+        PopulateHelperTables(DatasetId);
       }
-      else { 
+      else {
         // if dataset exists, delete all existing table rows
-        string restUrlExpensesTableRows = string.Format("{0}/{1}/tables/Expenses/rows", restUrlDatasets, DatasetId);
-        ExecuteDeleteRequest(restUrlExpensesTableRows);
+        restUrlContributionsTableRows = string.Format("{0}/{1}/tables/Contributions/rows", restUrlDatasets, DatasetId);
+        ExecuteDeleteRequest(restUrlContributionsTableRows);
       }
-
-      // add rows
-      ExpenseTableRows expensesData = SampleData.GetExpense();
-      Console.WriteLine();
-      Console.Write("Adding rows");
-      foreach (var expenseRow in expensesData.rows) {
-        Console.Write(".");
-        expenseRow.Time = DateTime.Now.AddHours(-4);
-        expenseRow.TimeWindow = DateTime.Now.Hour.ToString("00") + ":" +
-                                DateTime.Now.Minute.ToString("00") + ":" +
-                                ((DateTime.Now.Second / 10) * 10).ToString("00");
-
-        ExpenseRow[] Expenses = { expenseRow };
-        ExpenseTableRows expenseRows = new ExpenseTableRows { rows = Expenses };
-        string jsonExpenseRows = JsonConvert.SerializeObject(expenseRows);
-        string restUrlExpenseTableRows = string.Format("{0}/{1}/tables/Expenses/rows", restUrlDatasets, DatasetId);
-        string json = ExecutePostRequest(restUrlExpenseTableRows, jsonExpenseRows);
-
-        Thread.Sleep(500);
-      }
-
-    }
-
-    public void CreateDemoStreamingDataset(string DatasetName) {
-      string restUrlDatasets = PowerBiServiceRootUrl + "datasets";
-
-      // check to see if dataset exists
-      string DatasetId = GetDatasetId(DatasetName);
-      if (string.IsNullOrEmpty(DatasetId)) {
-        Console.WriteLine("Creating new datset named " + DatasetName);
-        // create dataet if it does not exist
-        string jsonNewDataset = Properties.Resources.DemoStreamingDataset.Replace("@DatasetName", DatasetName);
-        // execute REST call to create new dataset
-        string json = ExecutePostRequest(restUrlDatasets, jsonNewDataset);
-        // retrieve Guid to track dataset ID
-        Dataset dataset = JsonConvert.DeserializeObject<Dataset>(json);
-        Console.WriteLine("Creating new Streaming Dataset named " + DatasetName + "...");
-        // get Dataset ID once it has been created
-        DatasetId = GetDatasetId(DatasetName);
-      }
-
-      Console.WriteLine();
-      Console.Write("Adding rows");
-      double temperatureBatchA = 100;
-      double temperatureBatchB = 100;
-      double temperatureBatchC = 100;
-      Random rand = new Random(714);
 
       while (true) {
+        PushCampaignContributionRows(DatasetId);
+        Thread.Sleep(3000);
+        ExecuteDeleteRequest(restUrlContributionsTableRows);
+        Thread.Sleep(5000);
+      }
+    }
+  
+    public void PopulateHelperTables(string DatasetId) {
 
-        Console.Write(".");
+      string jsonRowsGoal = @"{ ""rows"": [ { ""Value"": 1000000  }] }";
+      string restUrlTableRowsGoal = string.Format("{0}/{1}/tables/ContributionsGoal/rows", restUrlDatasets, DatasetId);
+      ExecuteDeleteRequest(restUrlTableRowsGoal);
+      ExecutePostRequest(restUrlTableRowsGoal, jsonRowsGoal);
 
-        double bumpA = rand.Next(-50, 240) / (double)100;
-        temperatureBatchA += bumpA;
-        if (temperatureBatchA < 212) {
-          temperatureBatchA = 212;
-        }
-        TemperatureReadingsRow rowA = new TemperatureReadingsRow {
-          Temperature = temperatureBatchA,
-          TargetTemperature = 212,
-          MaxTemperature = 250,
-          Batch = "Batch A",
-          Time = DateTime.Now.AddHours(-4)
-        };
+      string jsonRowsMax = @"{ ""rows"": [ { ""Value"": 1250000  }] }";
+      string restUrlTableRowsMax = string.Format("{0}/{1}/tables/ContributionsMax/rows", restUrlDatasets, DatasetId);
+      ExecuteDeleteRequest(restUrlTableRowsMax);
+      ExecutePostRequest(restUrlTableRowsMax, jsonRowsMax);
+    }
 
+    public void PushCampaignContributionRows(string DatasetId) {
+      int counter = 1;
 
-        double bumpB = rand.Next(-80, 280) / (double)100;
-        temperatureBatchB += bumpB;
-        if (temperatureBatchB < 212) {
-          temperatureBatchB = 212;
-        }
-        TemperatureReadingsRow rowB = new TemperatureReadingsRow {
-          Temperature = temperatureBatchB,
-          TargetTemperature = 212,
-          MaxTemperature = 250,
-          Batch = "Batch B",
-          Time = DateTime.Now.AddHours(-4)
-        };
-
-
-        double bumpC = rand.Next(-20, 350) / (double)100;
-        temperatureBatchC += bumpC;
-        if (temperatureBatchC < 212) {
-          temperatureBatchC = 212;
-        }
-        TemperatureReadingsRow rowC = new TemperatureReadingsRow {
-          Temperature = temperatureBatchC,
-          TargetTemperature = 212,
-          MaxTemperature = 250,
-          Batch = "Batch C",
-          Time = DateTime.Now.AddHours(-4)
-        };
+      while (counter < 7) {
+        AddRows(DatasetId);
+        counter += 1;
+        Thread.Sleep(1000);
+      }
 
 
+      while (counter < 21) {
+        AddRows(DatasetId);
+        counter += 1;
+        Thread.Sleep(1000);
+      }
 
-        TemperatureReadingsRow[] rows = { rowA, rowB, rowC };
-        TemperatureReadingsRows temperatureReadingsRows = new TemperatureReadingsRows { rows = rows };
-        string jsonNewRows = JsonConvert.SerializeObject(temperatureReadingsRows);
-        string restUrlTargetTableRows = string.Format("{0}/{1}/tables/TemperatureReadings/rows", restUrlDatasets, DatasetId);
-        string jsonResultAddExpenseRows = ExecutePostRequest(restUrlTargetTableRows, jsonNewRows);
-
+      while (counter < 160) {
+        AddRows(DatasetId);
+        counter += 1;
         Thread.Sleep(500);
       }
 
-
     }
 
-    public void CreateDemoHybridDataset(string DatasetName) {
-      string restUrlDatasets = PowerBiServiceRootUrl + "datasets";
-
-      // check to see if dataset exists
-      string DatasetId = GetDatasetId(DatasetName);
-      if (string.IsNullOrEmpty(DatasetId)) {
-        Console.WriteLine("Creating new hybrid datset named " + DatasetName);
-        // create dataet if it does not exist
-        string jsonNewDataset = Properties.Resources.DemoHybridDataset.Replace("@DatasetName", DatasetName);
-        // execute REST call to create new dataset
-        string json = ExecutePostRequest(restUrlDatasets, jsonNewDataset);
-        // retrieve Guid to track dataset ID
-        Dataset dataset = JsonConvert.DeserializeObject<Dataset>(json);
-        Console.WriteLine("Creating new Hybrid Dataset named " + DatasetName + "...");
-        // get Dataset ID once it has been created
-        DatasetId = GetDatasetId(DatasetName);
+    public void AddRows(string DatasetId) {
+      Console.Write(".");
+      List<Contribution> contributionList = new List<Contribution>();
+      foreach (var contribution in DataFactory.GetContributionList()) {
+        contributionList.Add(new Contribution {
+          ContributionID = contribution.ID,
+          Contributor = contribution.FirstName + " " + contribution.LastName,
+          City = contribution.City + ", " + contribution.State,
+          State = contribution.State,
+          Zipcode = contribution.Zipcode,
+          Gender = contribution.Gender,
+          Time = contribution.Time,
+          TimeWindow = contribution.TimeWindow,
+          Amount = contribution.Amount
+        });
       }
 
-      Console.WriteLine();
-      Console.Write("Adding rows");
-      double temperatureBatchA = 100;
-      double temperatureBatchB = 100;
-      double temperatureBatchC = 100;
-      Random rand = new Random(714);
+      ContributionSet contributionSet = new ContributionSet {
+        rows = contributionList.ToArray<Contribution>()
+      };
 
-      while (true) {
+      string jsonRows = JsonConvert.SerializeObject(contributionSet);
 
-        Console.Write(".");
-
-        double bumpA = rand.Next(-50, 240) / (double)100;
-        temperatureBatchA += bumpA;
-        if (temperatureBatchA < 212) {
-          temperatureBatchA = 212;
-        }
-        TemperatureReadingsRow rowA = new TemperatureReadingsRow {
-          Temperature = temperatureBatchA,
-          TargetTemperature = 212,
-          MaxTemperature = 250,
-          Batch = "Batch A",
-          Time = DateTime.Now.AddHours(-4)
-        };
-
-
-        double bumpB = rand.Next(-80, 280) / (double)100;
-        temperatureBatchB += bumpB;
-        if (temperatureBatchB < 212) {
-          temperatureBatchB = 212;
-        }
-        TemperatureReadingsRow rowB = new TemperatureReadingsRow {
-          Temperature = temperatureBatchB,
-          TargetTemperature = 212,
-          MaxTemperature = 250,
-          Batch = "Batch B",
-          Time = DateTime.Now.AddHours(-4)
-        };
-
-
-        double bumpC = rand.Next(-20, 350) / (double)100;
-        temperatureBatchC += bumpC;
-        if (temperatureBatchC < 212) {
-          temperatureBatchC = 212;
-        }
-        TemperatureReadingsRow rowC = new TemperatureReadingsRow {
-          Temperature = temperatureBatchC,
-          TargetTemperature = 212,
-          MaxTemperature = 250,
-          Batch = "Batch C",
-          Time = DateTime.Now.AddHours(-4)
-        };
-
-
-
-        TemperatureReadingsRow[] rows = { rowA, rowB, rowC };
-        TemperatureReadingsRows temperatureReadingsRows = new TemperatureReadingsRows { rows = rows };
-        string jsonNewRows = JsonConvert.SerializeObject(temperatureReadingsRows);
-        string restUrlTargetTableRows = string.Format("{0}/{1}/tables/TemperatureReadings/rows", restUrlDatasets, DatasetId);
-        string jsonResultAddExpenseRows = ExecutePostRequest(restUrlTargetTableRows, jsonNewRows);
-
-        Thread.Sleep(500);
-      }
-
+      string restUrlTableRows = string.Format("{0}/{1}/tables/Contributions/rows", restUrlDatasets, DatasetId);
+      string json = ExecutePostRequest(restUrlTableRows, jsonRows);
 
     }
-
   }
 
   public class Dataset {
@@ -353,61 +382,6 @@ namespace StreamingDatasetsDemo {
     public List<Dataset> value { get; set; }
   }
 
-  public class ExpenseRow {
-    public string Expense { get; set; }
-    public string Category { get; set; }
-    public double Amount { get; set; }
-    public DateTime Time { get; set; }
-    public string TimeWindow { get; set; }
-  }
-
-  class ExpenseTableRows {
-    public ExpenseRow[] rows { get; set; }
-  }
-
-  public class TemperatureReadingsRow {
-    public double Temperature { get; set; }
-    public double TargetTemperature { get; set; }
-    public double MaxTemperature { get; set; }
-    public string Batch { get; set; }
-    public DateTime Time { get; set; }
-  }
-
-  class TemperatureReadingsRows {
-    public TemperatureReadingsRow[] rows { get; set; }
-  }
-
-  class SampleData {
-    public static ExpenseTableRows GetExpense() {
-      ExpenseRow[] Expenses = {
-        new ExpenseRow { Expense="Pens and staples", Category="Office Supplies", Amount=32.23 },
-        new ExpenseRow { Expense="Google Add Words", Category="Marketing", Amount=221.23 },
-        new ExpenseRow { Expense="Bing Add Words", Category="Marketing", Amount=100 },
-        new ExpenseRow { Expense="New Chair", Category="Office Supplies", Amount=429 },
-        new ExpenseRow { Expense="Electricity Bill", Category="Operations", Amount=215.21 },
-        new ExpenseRow { Expense="Google Add Words", Category="Marketing", Amount=215 },
-        new ExpenseRow { Expense="Print Ads", Category="Marketing", Amount=500 },
-        new ExpenseRow { Expense="Photos", Category="Marketing", Amount=5.34 },
-        new ExpenseRow { Expense="Google Add Words", Category="Marketing", Amount=400 },
-        new ExpenseRow { Expense="Electricity Bill", Category="Operations", Amount=234 },
-        new ExpenseRow { Expense="New Printer", Category="Office Supplies", Amount=121 },
-        new ExpenseRow { Expense="Print Ads", Category="Marketing", Amount=120 },
-        new ExpenseRow { Expense="Swag", Category="Marketing", Amount=120 },
-        new ExpenseRow { Expense="Cleaning Supplies", Category="Office Supplies", Amount=32 },
-        new ExpenseRow { Expense="Cleaning Service", Category="Operations", Amount=234 },
-        new ExpenseRow { Expense="Pencils", Category="Office Supplies", Amount=5.21 },
-        new ExpenseRow { Expense="Google Add Words", Category="Marketing", Amount=5.21 },
-        new ExpenseRow { Expense="Electricity Bill", Category="Operations", Amount=520 },
-        new ExpenseRow { Expense="Google Ad Words", Category="Marketing", Amount=120 },
-        new ExpenseRow { Expense="Print Ads", Category="Marketing", Amount=200 },
-        new ExpenseRow { Expense="Print Ads", Category="Marketing", Amount=121 },
-        new ExpenseRow { Expense="Bing Ad Words", Category="Marketing", Amount=200 },
-        new ExpenseRow { Expense="Electricity Bill", Category="Operations", Amount=210 },
-        new ExpenseRow { Expense="Google Add Words", Category="Marketing", Amount=200 },
-        new ExpenseRow { Expense="New Server", Category="Operations", Amount=2300 }
-      };
-      return new ExpenseTableRows { rows = Expenses };
-
-    }
-  }
+  
+  
 }

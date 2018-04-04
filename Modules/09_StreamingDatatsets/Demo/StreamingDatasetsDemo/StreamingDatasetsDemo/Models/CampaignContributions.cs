@@ -3,9 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace CampaignContributions.Models {
+namespace StreamingDatasetsDemo.Models {
+
+  public class Contribution {
+    public int ContributionID { get; set; }
+    public string Contributor { get; set; }
+    public string City { get; set; }
+    public string State { get; set; }
+    public int Zipcode { get; set; }
+    public string Gender { get; set; }
+    public DateTime Time { get; set; }
+    public string TimeWindow { get; set; }
+    public decimal Amount { get; set; }
+  }
+
+  class ContributionSet {
+    public Contribution[] rows { get; set; }
+  }
 
   #region "Classes for generating sample data for contribution demo"
 
@@ -23,7 +38,8 @@ namespace CampaignContributions.Models {
     public string State { get; set; }
     public int Zipcode { get; set; }
     public string Gender { get; set; }
-    public string Time { get; set; }
+    public DateTime Time { get; set; }
+    public string TimeWindow { get; set; }
     public decimal Amount { get; set; }
   }
 
@@ -37,25 +53,7 @@ namespace CampaignContributions.Models {
     private static int ContributionGrowthPhase = 1;
 
     public static void SetContributionGrowthPhase(int value) {
-
-      ContributionGrowthPhase = value;
-      if (ContributionGrowthPhase == 6) {
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine("Connection to Card Card Authority has been lost.");
-        Console.WriteLine();
-      }
-      if (ContributionGrowthPhase == 7) {
-        Console.WriteLine();
-        Console.WriteLine("Web site restarting to reestablish connection");
-        Thread.Sleep(2000);
-        Console.WriteLine("Web site has successfully restarted...");
-        Thread.Sleep(1000);
-        Console.WriteLine("Connection to credit card authority reestablished...");
-        Thread.Sleep(1000);
-        Console.WriteLine("System is now operational and ready to accept contributions...");
-        Console.WriteLine();
-      }
+      ContributionGrowthPhase = value; 
     }
 
     public static ContributionData GetNextContribution() {
@@ -112,7 +110,7 @@ namespace CampaignContributions.Models {
 
       string LastName = GetNextLastName();
 
-      string TimeValue = DateTime.Now.ToString("h:mm") + ":" + ((DateTime.Now.Second / 30) * 30).ToString("00");
+      string TimeValue = DateTime.Now.ToString("h:mm") + ":" + ((DateTime.Now.Second / 15) * 15).ToString("00");
 
       ContributionData newContribution = new ContributionData {
         ID = contributionId,
@@ -122,7 +120,8 @@ namespace CampaignContributions.Models {
         State = State,
         Zipcode = Zipcode,
         Gender = Gender,
-        Time = TimeValue,
+        Time = DateTime.Now.AddHours(-4),
+        TimeWindow = TimeValue,
         Amount = GetNextContributionAmount(Zipcode)
       };
       return newContribution;
@@ -741,13 +740,7 @@ namespace CampaignContributions.Models {
         list.Add(GetNextContribution());
       }
 
-      if (ContributionGrowthPhase == 6) {
-        Console.WriteLine("Error in web service call to Credit Card Authority...");
-      }
-      else {
-        Console.Write(".");
-      }
-
+      Console.Write(".");
       return list;
     }
 
@@ -847,8 +840,7 @@ namespace CampaignContributions.Models {
       100, 250, 250, 250, 250, 250, 250, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 1000, 1000, 1000, 1000, 2500, 2500, 5000, 10000
     };
 
-
   }
 
-}
 
+}

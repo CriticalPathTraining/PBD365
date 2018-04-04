@@ -1,8 +1,4 @@
 ﻿using System;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.Rest;
 
 namespace StreamingDatasetsDemo {
   class Program {
@@ -10,12 +6,11 @@ namespace StreamingDatasetsDemo {
     static PowerBiServiceWrapper pbiService = new PowerBiServiceWrapper();
 
     static void Main() {
-
-
-      //pbiService.CreateDemoPushDataset("Demo Push Dataset");
-      //pbiService.CreateDemoStreamingDataset("Demo Streaming Dataset");
-      pbiService.CreateDemoHybridDataset("Demo Hybrid Dataset");
-
+      
+      pbiService.CreateDemoStreamingDataset("Demo 1: Streaming Dataset");
+      // pbiService.CreateDemoHybridDataset("Demo 2: Hybrid Dataset");
+      // pbiService.CreateDemoPushDataset("Demo 3: Push Dataset");
+      
     }
   }
 
