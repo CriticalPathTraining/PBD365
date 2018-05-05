@@ -2,14 +2,14 @@
   "visual": {
     "name": "viz03",
     "displayName": "viz03",
-    "guid": "viz036AA74B9636F64A41BDDEDBE7676FC51B",
+    "guid": "viz035D247069C401429DBA7F3A446E1958AE",
     "visualClassName": "Visual",
     "version": "1.0.0",
     "description": "",
     "supportUrl": "",
     "gitHubUrl": ""
   },
-  "apiVersion": "1.9.0",
+  "apiVersion": "1.11.0",
   "author": {
     "name": "",
     "email": ""
@@ -26,4 +26,3 @@
   "dependencies": "dependencies.json",
   "stringResources": []
 }
-

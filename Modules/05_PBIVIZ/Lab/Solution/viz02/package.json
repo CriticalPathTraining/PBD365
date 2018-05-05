@@ -5,7 +5,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^2.0.46",
-    "jquery": "^3.2.1"
+    "jquery": "^3.3.1"
   }
 }
 

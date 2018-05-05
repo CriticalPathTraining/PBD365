@@ -1,0 +1,28 @@
+module powerbi.extensibility.visual {
+
+    export class Visual implements IVisual {
+
+        private container: JQuery;
+
+        constructor(options: VisualConstructorOptions) {
+            this.container = $(options.element);
+        }
+
+        public update(options: VisualUpdateOptions) {
+
+            var table: JQuery = $("<table>", {"id": "myTable"})
+                .append( $("<tr>")
+                .append( $("<td>").text("Width") )
+                .append( $("<td>").text(options.viewport.width.toFixed(0))
+                ))         
+                .append( $("<tr>")
+                .append( $("<td>").text("Height") )
+                .append( $("<td>").text(options.viewport.height.toFixed(0))
+                )
+            );
+
+            this.container.empty().append(table);
+
+        }        
+    }
+}

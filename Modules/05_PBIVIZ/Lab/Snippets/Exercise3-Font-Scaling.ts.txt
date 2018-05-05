@@ -1,0 +1,8 @@
+var scaledFontSizeWidth: number = Math.round(options.viewport.width / 7);
+var scaledFontSizeHeight: number = Math.round(options.viewport.height / 5);
+var scaledFontSize: number = Math.min(...[scaledFontSizeWidth, scaledFontSizeHeight]);
+var scaledFontSizeCss: string = scaledFontSize + "px";
+
+$("td", table).css({
+    "font-size": scaledFontSizeCss
+});

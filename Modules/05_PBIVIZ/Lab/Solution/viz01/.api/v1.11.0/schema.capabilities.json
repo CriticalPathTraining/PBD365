@@ -1,5 +1,5 @@
 {
-    "PBI_API_VERSION": "v1.5.0",
+    "PBI_API_VERSION": "v1.11.0",
     "type": "object",
     "properties": {
         "dataRoles": {
@@ -32,6 +32,10 @@
         "supportsHighlight": {
             "type": "boolean",
             "description": "Tells the host to include highlight data"
+        },
+        "advancedEditModeSupport": {
+            "type": "number",
+            "description": "Indicates the action requested from the host when this visual enters Advanced Edit mode."
         }
     },
     "additionalProperties": false,
@@ -48,6 +52,10 @@
                     "type": "string",
                     "description": "The name of this data role that is shown to the user"
                 },
+                "displayNameKey": {
+                    "type": "string",
+                    "description": "The localization key for the displayed name in the stringResourced file"
+                },
                 "kind": {
                     "description": "The kind of data that can be bound do this role",
                     "$ref": "#/definitions/dataRole.kind"
@@ -55,6 +63,10 @@
                 "description": {
                     "type": "string",
                     "description": "A description of this role shown to the user as a tooltip"
+                },
+                "descriptionKey": {
+                    "type": "string",
+                    "description": "The localization key for the description in the stringResourced file"
                 },
                 "preferredTypes": {
                     "type": "array",
@@ -89,7 +101,7 @@
                         "type": "object",
                         "description": "condition - Defines conditions for a data mapping (each key needs to be a valid data role)",
                         "patternProperties": {
-                            "^\\w+$": {
+                            "^[\\w\\s-]+$": {
                                 "description": "Specifies the number of values that can be assigned to this data role in this mapping",
                                 "$ref": "#/definitions/dataViewMapping.numberRangeWithKind"
                             }
@@ -619,7 +631,7 @@
             "type": "object",
             "description": "A list of unique property groups",
             "patternProperties": {
-                "^\\w+$": {
+                "^[\\w\\s-]+$": {
                     "type": "object",
                     "description": "Settings for a group of properties",
                     "properties": {
@@ -627,15 +639,23 @@
                             "type": "string",
                             "description": "The name shown to the user to describe this group of properties"
                         },
+                        "displayNameKey": {
+                            "type": "string",
+                            "description": "The localization key for the displayed name in the stringResourced file"
+                        },
                         "description": {
                             "type": "string",
                             "description": "A description of this object shown to the user as a tooltip"
+                        },
+                        "descriptionKey": {
+                            "type": "string",
+                            "description": "The localization key for the description in the stringResourced file"
                         },
                         "properties": {
                             "type": "object",
                             "description": "A list of unique properties contained in this group",
                             "patternProperties": {
-                                "^\\w+$": {
+                                "^[\\w\\s-]+$": {
                                     "$ref": "#/definitions/object.propertySettings"
                                 }
                             },
@@ -655,9 +675,17 @@
                     "type": "string",
                     "description": "The name shown to the user to describe this property"
                 },
+                "displayNameKey": {
+                    "type": "string",
+                    "description": "The localization key for the displayed name in the stringResourced file"
+                },
                 "description": {
                     "type": "string",
                     "description": "A description of this property shown to the user as a tooltip"
+                },
+                "descriptionKey": {
+                    "type": "string",
+                    "description": "The localization key for the description in the stringResourced file"
                 },
                 "placeHolderText": {
                     "type": "string",
@@ -670,9 +698,42 @@
                 "type": {
                     "description": "Describes what type of property this is and how it should be displayed to the user",
                     "$ref": "#/definitions/valueType"
+                },
+                "rule": {
+                    "type": "object",
+                    "description": "Describes substitution rule that replaces property object, described inside the rule, to current property object that contains this rule",
+                    "$ref": "#/definitions/substitutionRule"
                 }
             },
             "additionalProperties": false
+        },
+        "substitutionRule": {
+            "type": "object",
+            "description": "Describes substitution rule that replaces property object, described inside the rule, to current property object that contains this rule",
+            "properties": {
+                "inputRole": {
+                    "type": "string",
+                    "description": "The name of role. If this role is set, the substitution will be applied"
+                },
+                "output": {
+                    "type": "object",
+                    "description": "Describes what exactly is necessary to replace",
+                    "properties": {
+                        "property": {
+                            "type": "string",
+                            "description": "The name of property object that will be replaced"
+                        },
+                        "selector": {
+                            "type": "array",
+                            "description": "The array of selector names. Usually, it contains only one selector -- 'Category'",
+                            "items": {
+                                "type": "string",
+                                "description": "The name of selector"
+                            }
+                        }
+                    }
+                }
+            }
         },
         "sorting": {
             "type": "object",
@@ -765,6 +826,10 @@
                                 "type": "string",
                                 "description": "The name shown to the user to describe this item"
                             },
+                            "displayNameKey": {
+                                "type": "string",
+                                "description": "The localization key for the displayed name in the stringResourced file"
+                            },
                             "value": {
                                 "type": "string",
                                 "description": "The internal value of this property when this item is selected"
@@ -795,6 +860,92 @@
                                             }
                                         }
                                     ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "fillRule" : {
+                    "type": "object",
+                    "description": "A color gradient that will be dispalyed to the user as a minimum (,medium) and maximum color pickers",
+                    "properties": {
+                        "linearGradient2": {
+                            "type": "object",
+                            "description": "Two color gradient",
+                            "properties": {
+                                "max": {
+                                    "type": "object",
+                                    "description": "Maximum color for gradient",
+                                    "properties": {
+                                        "color": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    }
+                                },
+                                "min": {
+                                    "type": "object",
+                                    "description": "Minimum color for gradient",
+                                    "properties": {
+                                        "color": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    }
+                                },
+                                "nullColoringStrategy": {
+                                    "type": "object",
+                                    "description": "Null color strategy"
+                                }
+                            }
+                        },
+                        "linearGradient3": {
+                            "type": "object",
+                            "description": "Three color gradient",
+                            "properties": {
+                                "max": {
+                                    "type": "object",
+                                    "description": "Maximum color for gradient",
+                                    "properties": {
+                                        "color": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    }
+                                },
+                                "min": {
+                                    "type": "object",
+                                    "description": "Minimum color for gradient",
+                                    "properties": {
+                                        "color": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    }
+                                },
+                                "mid": {
+                                    "type": "object",
+                                    "description": "Middle color for gradient",
+                                    "properties": {
+                                        "color": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    }
+                                },
+                                "nullColoringStrategy": {
+                                    "type": "object",
+                                    "description": "Null color strategy"
                                 }
                             }
                         }
@@ -939,6 +1090,11 @@
                 {
                     "required": [
                         "fill"
+                    ]
+                },
+                {
+                    "required": [
+                        "fillRule"
                     ]
                 },
                 {

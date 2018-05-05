@@ -10055,11 +10055,16 @@ var powerbi;
   });
   if (typeof define === "function" && define.amd) this.d3 = d3, define(d3); else if (typeof module === "object" && module.exports) module.exports = d3; else this.d3 = d3;
 }();
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 /*
  *  Power BI Visualizations
  *
@@ -10091,8 +10096,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var viz036AA74B9636F64A41BDDEDBE7676FC51B;
-            (function (viz036AA74B9636F64A41BDDEDBE7676FC51B) {
+            var viz035D247069C401429DBA7F3A446E1958AE;
+            (function (viz035D247069C401429DBA7F3A446E1958AE) {
                 "use strict";
                 var DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
                 var VisualSettings = (function (_super) {
@@ -10104,7 +10109,7 @@ var powerbi;
                     }
                     return VisualSettings;
                 }(DataViewObjectsParser));
-                viz036AA74B9636F64A41BDDEDBE7676FC51B.VisualSettings = VisualSettings;
+                viz035D247069C401429DBA7F3A446E1958AE.VisualSettings = VisualSettings;
                 var dataPointSettings = (function () {
                     function dataPointSettings() {
                         // Default color
@@ -10120,8 +10125,8 @@ var powerbi;
                     }
                     return dataPointSettings;
                 }());
-                viz036AA74B9636F64A41BDDEDBE7676FC51B.dataPointSettings = dataPointSettings;
-            })(viz036AA74B9636F64A41BDDEDBE7676FC51B = visual.viz036AA74B9636F64A41BDDEDBE7676FC51B || (visual.viz036AA74B9636F64A41BDDEDBE7676FC51B = {}));
+                viz035D247069C401429DBA7F3A446E1958AE.dataPointSettings = dataPointSettings;
+            })(viz035D247069C401429DBA7F3A446E1958AE = visual.viz035D247069C401429DBA7F3A446E1958AE || (visual.viz035D247069C401429DBA7F3A446E1958AE = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -10131,8 +10136,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var viz036AA74B9636F64A41BDDEDBE7676FC51B;
-            (function (viz036AA74B9636F64A41BDDEDBE7676FC51B) {
+            var viz035D247069C401429DBA7F3A446E1958AE;
+            (function (viz035D247069C401429DBA7F3A446E1958AE) {
                 var Visual = (function () {
                     function Visual(options) {
                         this.padding = 20;
@@ -10176,8 +10181,8 @@ var powerbi;
                     };
                     return Visual;
                 }());
-                viz036AA74B9636F64A41BDDEDBE7676FC51B.Visual = Visual;
-            })(viz036AA74B9636F64A41BDDEDBE7676FC51B = visual.viz036AA74B9636F64A41BDDEDBE7676FC51B || (visual.viz036AA74B9636F64A41BDDEDBE7676FC51B = {}));
+                viz035D247069C401429DBA7F3A446E1958AE.Visual = Visual;
+            })(viz035D247069C401429DBA7F3A446E1958AE = visual.viz035D247069C401429DBA7F3A446E1958AE || (visual.viz035D247069C401429DBA7F3A446E1958AE = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -10187,13 +10192,13 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.viz036AA74B9636F64A41BDDEDBE7676FC51B_DEBUG = {
-                name: 'viz036AA74B9636F64A41BDDEDBE7676FC51B_DEBUG',
+            plugins.viz035D247069C401429DBA7F3A446E1958AE_DEBUG = {
+                name: 'viz035D247069C401429DBA7F3A446E1958AE_DEBUG',
                 displayName: 'viz03',
                 class: 'Visual',
                 version: '1.0.0',
-                apiVersion: '1.9.0',
-                create: function (options) { return new powerbi.extensibility.visual.viz036AA74B9636F64A41BDDEDBE7676FC51B.Visual(options); },
+                apiVersion: '1.11.0',
+                create: function (options) { return new powerbi.extensibility.visual.viz035D247069C401429DBA7F3A446E1958AE.Visual(options); },
                 custom: true
             };
         })(plugins = visuals.plugins || (visuals.plugins = {}));

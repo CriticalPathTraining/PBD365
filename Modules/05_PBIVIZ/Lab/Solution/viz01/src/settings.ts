@@ -1,5 +1,5 @@
 /*
- *  Power BI Visual CLI
+ *  Power BI Visualizations
  *
  *  Copyright (c) Microsoft Corporation
  *  All rights reserved.
@@ -24,24 +24,25 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.PBI_CV_A4A9F806_8937_4049_A1A6_4804BF4C04CD  {
-    export class Visual implements IVisual {
-        private target: HTMLElement;
-        private updateCount: number;
+module powerbi.extensibility.visual {
+    "use strict";
+    import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 
-        constructor(options: VisualConstructorOptions) {
-            console.log('Visual constructor', options);
-            this.target = options.element;
-            this.updateCount = 0;
-        }
+    export class VisualSettings extends DataViewObjectsParser {
+      public dataPoint: dataPointSettings = new dataPointSettings();
+      }
 
-public update(options: VisualUpdateOptions) {
-    console.log('Visual update', options);
-    this.target.innerHTML = 
-        `<table>
-          <tr><td>Width:</td><td>${options.viewport.width.toFixed(2)}</td></tr>
-          <tr><td>Height:</td><td>${options.viewport.height.toFixed(2)}</td></tr>
-        </table>`;
-}
-    }
+    export class dataPointSettings {
+     // Default color
+      public defaultColor: string = "";
+     // Show all
+      public showAllDataPoints: boolean = true;
+     // Fill
+      public fill: string = "";
+     // Color saturation
+      public fillRule: string = "";
+     // Text Size
+      public fontSize: number = 12;
+     }
+
 }

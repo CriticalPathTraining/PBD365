@@ -2,14 +2,14 @@
   "visual": {
     "name": "viz02",
     "displayName": "viz02",
-    "guid": "viz0200A9F84AED73453DA9150E9CEDDD0E30",
+    "guid": "viz02C457563F0DCA4FBCA2604886956D8748",
     "visualClassName": "Visual",
     "version": "1.0.0",
     "description": "",
     "supportUrl": "",
     "gitHubUrl": ""
   },
-  "apiVersion": "1.9.0",
+  "apiVersion": "1.11.0",
   "author": {
     "name": "",
     "email": ""

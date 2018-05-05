@@ -2,14 +2,14 @@
   "visual": {
     "name": "viz01",
     "displayName": "viz01",
-    "guid": "PBI_CV_A4A9F806_8937_4049_A1A6_4804BF4C04CD",
+    "guid": "viz0115A4DDC904D740ABA2523AE085C841E4",
     "visualClassName": "Visual",
     "version": "1.0.0",
     "description": "",
     "supportUrl": "",
     "gitHubUrl": ""
   },
-  "apiVersion": "1.5.0",
+  "apiVersion": "1.11.0",
   "author": {
     "name": "",
     "email": ""
@@ -17,8 +17,11 @@
   "assets": {
     "icon": "assets/icon.png"
   },
-  "externalJS": [],
+  "externalJS": [
+    "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.js"
+  ],
   "style": "style/visual.less",
   "capabilities": "capabilities.json",
-  "dependencies": "dependencies.json"
+  "dependencies": "dependencies.json",
+  "stringResources": []
 }
