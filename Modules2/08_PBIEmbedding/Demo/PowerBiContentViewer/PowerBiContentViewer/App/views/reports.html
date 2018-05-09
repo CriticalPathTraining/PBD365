@@ -1,0 +1,12 @@
+﻿<div id="navigation_column" class="col-lg-2" >
+  <h4>Reports:</h4>
+  <div ng-repeat="report in reports" style="padding:2px;">
+    <a ng-click="setEmbedUrl(report.embedUrl)" href="" class="btn btn-primary nav-url" >
+      {{report.name}}
+    </a>
+  </div>
+</div>
+
+<div id="main_column" class="col-lg-10">
+  <iframe id="reportFrame" ng-src="{{embedUrl}}" iframe-onload="PowerBiReportOnLoad()" />
+</div>

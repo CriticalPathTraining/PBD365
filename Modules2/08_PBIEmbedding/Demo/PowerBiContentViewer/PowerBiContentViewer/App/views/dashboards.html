@@ -1,0 +1,14 @@
+﻿<div id="navigation_column" class="col-lg-2">
+  <h4>Dashboards:</h4>
+  <div ng-repeat="dashboard in dashboards" style="padding:2px;">
+    <a ng-click="displayTiles(dashboard.id)" ng-href="" class="btn btn-primary nav-url">
+      {{dashboard.displayName}}
+    </a>
+  </div>
+</div>
+
+<div id="main_column" class="col-lg-10">
+  <div class="tile-container" data-ng-repeat="tile in tiles">
+    <iframe id="{{tile.id}}" src="{{tile.embedUrl}}" class="tile-iframe" iframe-onload="PowerBiDashboardTileOnLoad()" />
+  </div>
+</div>

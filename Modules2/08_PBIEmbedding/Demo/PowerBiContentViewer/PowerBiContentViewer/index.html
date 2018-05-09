@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=10" />
+  <title>Power BI Content Viewer</title>
+  <link href="Content/bootstrap.css" rel="stylesheet" />
+  <link href="Content/App.css" rel="stylesheet" />
+</head>
+<body ng-app="PowerBIContentViewer" >
+
+  <div id="top-nav" class="container" ng-cloak >
+    <div class="navbar navbar-default navbar-inverse" role="navigation" ng-controller="navbarController">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#/">Power BI Content Viewer</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#/reports" ng-show="userInfo.isAuthenticated">Reports</a></li>
+            <li><a href="#/dashboards" ng-show="userInfo.isAuthenticated">Dashboards</a></li>
+          </ul>
+          <div id="login" class="pull-right" >
+            <a class="btn btn-link" ng-hide="userInfo.isAuthenticated" ng-click="login()">Login</a>
+            <a class="btn btn-link" ng-show="userInfo.isAuthenticated" ng-click="logout()">Logout</a>
+            <span style="color:white;" ng-show="userInfo.isAuthenticated">Hello {{userInfo.profile["name"]}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ID="main-content" class="container body-content">
+    <div id="content-box" ng-view></div>
+  </div>
+
+  <script src="Scripts/jquery-2.2.0.js"></script>
+  <script src="Scripts/bootstrap.js"></script>
+  <script src="Scripts/angular.js"></script>
+  <script src="Scripts/angular-route.js"></script>
+  <script src="Scripts/angular-sanitize.js"></script>
+
+  <script src="Scripts/adal.js"></script>
+  <script src="Scripts/adal-angular.js"></script>
+
+  <script src="App/App.js"></script>
+  <script src="App/directives/iframeOnload.js"></script>
+  <script src="App/services/PowerBiService.js"></script>
+  <script src="App/controllers/navbarController.js"></script>
+  <script src="App/controllers/homeController.js"></script>
+  <script src="App/controllers/reportsController.js"></script>
+  <script src="App/controllers/dashboardsController.js"></script>
+
+</body>
+</html>
+
