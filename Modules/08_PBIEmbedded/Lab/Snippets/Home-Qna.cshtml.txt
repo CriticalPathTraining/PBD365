@@ -4,7 +4,7 @@
 
 <script src="~/Scripts/powerbi.js"></script>
 <script>
-  
+
   // Get data required for embedding
   var datasetId = "@Model.datasetId";
   var embedUrl = "@Model.embedUrl";
@@ -22,7 +22,6 @@
     viewMode: models.QnaMode.Interactive,
     question: "What is sales revenue by quarter and sales region as stacked area chart"
   };
-
 
   // Get a reference to the embedded report HTML element
   var embedContainer = document.getElementById('embedContainer');

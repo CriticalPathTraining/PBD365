@@ -132,29 +132,28 @@ namespace EmbeddedLab.Models {
 
     }
 
-public static async Task<ReportEmbeddingData> GetEmbeddingDataForSpecificReport(string currentReportId) {
+    public static async Task<ReportEmbeddingData> GetEmbeddingDataForSpecificReport(string currentReportId) {
 
-  PowerBIClient pbiClient = GetPowerBiClient();
+      PowerBIClient pbiClient = GetPowerBiClient();
 
-  var report = await pbiClient.Reports.GetReportInGroupAsync(workspaceId, currentReportId);
-  var embedUrl = report.EmbedUrl;
-  var reportName = report.Name;
+      var report = await pbiClient.Reports.GetReportInGroupAsync(workspaceId, currentReportId);
+      var embedUrl = report.EmbedUrl;
+      var reportName = report.Name;
 
-  GenerateTokenRequest generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "edit");
-  string embedToken =
-        (await pbiClient.Reports.GenerateTokenInGroupAsync(workspaceId,
-                                                            currentReportId,
-                                                            generateTokenRequestParameters)).Token;
+      GenerateTokenRequest generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "edit");
+      string embedToken =
+            (await pbiClient.Reports.GenerateTokenInGroupAsync(workspaceId,
+                                                                currentReportId,
+                                                                generateTokenRequestParameters)).Token;
 
-  return new ReportEmbeddingData {
-    reportId = currentReportId,
-    reportName = reportName,
-    embedUrl = embedUrl,
-    accessToken = embedToken
-  };
+      return new ReportEmbeddingData {
+        reportId = currentReportId,
+        reportName = reportName,
+        embedUrl = embedUrl,
+        accessToken = embedToken
+      };
 
-}
-
+    }
 
   }
 }

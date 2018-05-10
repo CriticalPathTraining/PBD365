@@ -16,19 +16,20 @@ body {
 .navbar-dark .navbar-nav .active > .nav-link {
   color: #FFC;
 }
+
 .navbar-dark .navbar-nav .nav-link {
   color: #F2C811;
 }
 
-    .navbar-dark .navbar-nav .nav-link:hover {
-      color: orange;
-    }
+  .navbar-dark .navbar-nav .nav-link:hover {
+    color: orange;
+  }
 
 
 #toolbar {
-      background-color: #666 !important;
-      border-bottom: 1px solid #333;
-    }
+  background-color: #666 !important;
+  border-bottom: 1px solid #333;
+}
 
   #toolbar button {
     margin: 4px;
