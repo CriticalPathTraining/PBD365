@@ -1,0 +1,72 @@
+module powerbi.extensibility.visual {
+
+  export class Visual implements IVisual {
+
+    private svg: d3.Selection<SVGElement>;
+    private svgGroupMain: d3.Selection<SVGElement>;
+    private settings: VisualSettings;
+    private dataViewInvalidMessage = "Data view not valid. Please add fields.";
+
+    constructor(options: VisualConstructorOptions) {
+
+      this.settings = VisualSettings.getDefault() as VisualSettings;
+
+      this.svg = d3.select(options.element).append('svg');
+      this.svgGroupMain = this.svg.append('g');
+      this.svgGroupMain.append("g").append("text")
+        .text(this.dataViewInvalidMessage)
+        .attr("dominant-baseline", "hanging")
+        .attr("font-size", this.settings.barchartProperties.xAxisFontSize)
+        .style("fill", this.settings.barchartProperties.barColor.solid.color);
+
+    }
+
+    public update(options: VisualUpdateOptions) {
+      // erase any existing graphics
+      this.svgGroupMain.selectAll("g").remove();
+      // set height and width of root SVG element using viewport passed by Power BI host
+      this.svg.attr({
+        height: options.viewport.height,
+        width: options.viewport.width
+      });
+      // print out Hello World message
+      if (options.dataViews[0]) {
+        // get visual setting values
+        this.settings = VisualSettings.parse(options.dataViews[0]) as VisualSettings;
+        // determine value of barColor property
+        var barColor: string  = "";
+        if(typeof(this.settings.barchartProperties.barColor)=="object") {
+          barColor = this.settings.barchartProperties.barColor.solid.color;
+        }
+        else {
+          barColor = <string>this.settings.barchartProperties.barColor;
+        }
+    
+        this.svgGroupMain.append("g").append("text")
+          .text("Hello World")
+          .attr("dominant-baseline", "hanging")
+          .attr("font-size", this.settings.barchartProperties.xAxisFontSize)
+          .style("fill", barColor);
+      }
+    }
+    
+
+    public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
+
+      // register object properties
+      var visualObjects: VisualObjectInstanceEnumerationObject =
+        <VisualObjectInstanceEnumerationObject>VisualSettings
+          .enumerateObjectInstances(this.settings, options);
+
+      // configure spinners for integers properties
+      visualObjects.instances[0].validValues = {
+        xAxisFontSize: { numberRange: { min: 10, max: 36 } },
+        yAxisFontSize: { numberRange: { min: 10, max: 36 } },
+      };
+
+      // return visual object collection
+      return visualObjects;
+    }
+
+  }
+}

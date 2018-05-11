@@ -1,0 +1,9 @@
+public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
+    console.log("EXECUTING: enumerateObjectInstances...");
+    var visualObjects: VisualObjectInstanceEnumerationObject = <VisualObjectInstanceEnumerationObject>VisualSettings.enumerateObjectInstances(this.settings, options);
+    visualObjects.instances[0].validValues = {
+        xAxisFontSize: { numberRange: { min: 10, max: 36 } },
+        yAxisFontSize: { numberRange: { min: 10, max: 36 } },
+    };
+    return visualObjects;
+}

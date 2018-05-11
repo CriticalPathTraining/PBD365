@@ -1,0 +1,13 @@
+constructor(options: VisualConstructorOptions) {
+    console.log("Constructor executing...");
+    this.svg = d3.select(options.element).append('svg');
+    this.svgGroupMain = this.svg.append('g');
+    this.svgGroupMain.append("g").append("text")
+        .text("Please add fields to create a valid dataset")
+        .attr("dominant-baseline", "hanging")
+        .attr("font-size", 14)
+        .style("fill", "red");
+
+    this.settings = VisualSettings.getDefault() as VisualSettings;
+    console.log("default settings", this.settings);
+}
