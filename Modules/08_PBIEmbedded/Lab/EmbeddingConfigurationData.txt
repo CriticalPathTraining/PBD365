@@ -1,9 +1,9 @@
-Master User Account: tedp@pbirox.onmicrosoft.com
-Master User Password: 2eZ24GET@8
+Master User Account: 
+Master User Password: 
 
-App Workspace ID: 8a6f2525-0c9b-4b87-9c3f-9713b7c408b4
-Dataset ID: 83f10805-396d-4fb4-8bb0-ba16f261e99e
-Report ID: b472d6b5-5998-43f2-95b7-ad4204280d3b
-Dashboard ID: f5a62e86-dc29-4d2c-88d5-bb9bd101ff9e
+App Workspace ID:
+Dataset ID:
+Report ID: 
+Dashboard ID:
 
-Client ID: 0dc1efd9-a5d3-4407-93bb-880d771525bf 
+Client ID: 
