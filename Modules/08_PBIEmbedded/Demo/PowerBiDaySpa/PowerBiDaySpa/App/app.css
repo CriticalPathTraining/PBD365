@@ -12,9 +12,11 @@
 }
 
 #navigation {
+  float: left;
   padding: 8px;
   border: 1px solid #999;
   border-bottom-right-radius: 8px;
+  background-color: #EEE;
 }
 
   #navigation.navbar-nav .nav-link {
@@ -46,5 +48,5 @@
 }
 
 #embedContainer {
-  height: 480px;
+  height: 640px;
 }

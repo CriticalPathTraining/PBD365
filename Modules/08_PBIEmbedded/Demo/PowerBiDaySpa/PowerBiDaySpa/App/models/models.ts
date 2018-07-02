@@ -3,8 +3,8 @@
   // data required for embedding a report
   export class Report {
     id: string;
-    embedUrl: string;
     name: string;
+    embedUrl: string;
   }
 
   // data required for embedding a new report

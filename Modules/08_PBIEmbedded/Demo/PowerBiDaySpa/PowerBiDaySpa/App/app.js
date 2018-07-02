@@ -83,6 +83,7 @@ var myApp;
             settings: {
                 filterPaneEnabled: false,
                 navContentPaneEnabled: true,
+                background: models.BackgroundType.Transparent
             }
         };
         // Embed the report and display it within the div container
@@ -97,7 +98,8 @@ var myApp;
             $("#navigation").empty();
             $("#navigation").append($("<div>", { class: "nav-header" }).text("Dashboards"));
             var list = $("<ul>");
-            for (var i = 0; i <= dashboards.length; i++) {
+            for (var i = 0; i < dashboards.length; i++) {
+                console.log(dashboards[i]);
                 var link = $("<a>", { class: "nav-link" }).text(dashboards[i].displayName);
                 link.attr("href", "JavaScript:void(0)");
                 link.click(onEmbedDashboard);
@@ -109,7 +111,8 @@ var myApp;
     var onEmbedDashboard = function (event) {
         var button = event.target;
         var dashboardName = button.innerText;
-        for (var i = 0; i <= dashboards.length; i++) {
+        for (var i = 0; i < dashboards.length; i++) {
+            console.log(dashboards[i]);
             if (dashboards[i].displayName == dashboardName) {
                 embedDashboard(dashboards[i]);
             }
@@ -132,7 +135,7 @@ var myApp;
             embedUrl: embedUrl,
             accessToken: accessToken,
             tokenType: models.TokenType.Aad,
-            pageView: "fitToWidth"
+            pageView: "fitToWidth" // choices are "actualSize", "fitToWidth" or "oneColumn"
         };
         // Embed the report and display it within the div container.
         var embeddedDashboard = powerbi.embed(embedContainer, config);
