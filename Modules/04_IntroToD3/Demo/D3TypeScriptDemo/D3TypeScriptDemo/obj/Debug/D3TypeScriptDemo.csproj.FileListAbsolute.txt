@@ -32,3 +32,6 @@ C:\GIT\PBD365\Modules\04_IntroToD3\Demo\D3TypeScriptDemo\D3TypeScriptDemo\bin\Mi
 C:\GIT\PBD365\Modules\04_IntroToD3\Demo\D3TypeScriptDemo\D3TypeScriptDemo\obj\Debug\D3TypeScriptDemo.csprojResolveAssemblyReference.cache
 C:\GIT\PBD365\Modules\04_IntroToD3\Demo\D3TypeScriptDemo\D3TypeScriptDemo\obj\Debug\D3TypeScriptDemo.dll
 C:\GIT\PBD365\Modules\04_IntroToD3\Demo\D3TypeScriptDemo\D3TypeScriptDemo\obj\Debug\D3TypeScriptDemo.pdb
+D:\Git\PBD365\Modules\04_IntroToD3\Demo\D3TypeScriptDemo\D3TypeScriptDemo\obj\Debug\D3TypeScriptDemo.csprojAssemblyReference.cache
+D:\Git\PBD365\Modules\04_IntroToD3\Demo\D3TypeScriptDemo\D3TypeScriptDemo\obj\Debug\D3TypeScriptDemo.dll
+D:\Git\PBD365\Modules\04_IntroToD3\Demo\D3TypeScriptDemo\D3TypeScriptDemo\obj\Debug\D3TypeScriptDemo.pdb
