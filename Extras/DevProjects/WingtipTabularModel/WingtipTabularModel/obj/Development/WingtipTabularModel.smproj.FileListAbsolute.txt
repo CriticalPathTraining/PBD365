@@ -1,6 +1,0 @@
-C:\Student\Modules\11_SQLServer2016\Demo\WingtipTabularModel\WingtipTabularModel\bin\Model.asdatabase
-C:\Student\Modules\11_SQLServer2016\Demo\WingtipTabularModel\WingtipTabularModel\bin\Model.deploymenttargets
-C:\Student\Modules\11_SQLServer2016\Demo\WingtipTabularModel\WingtipTabularModel\bin\Model.deploymentoptions
-C:\Student\Modules\11_SQLServer2016\Demo\WingtipTabularModel\WingtipTabularModel\obj\Development\Model.asdatabase
-C:\Student\Modules\11_SQLServer2016\Demo\WingtipTabularModel\WingtipTabularModel\obj\Development\Model.deploymentoptions
-C:\Student\Modules\11_SQLServer2016\Demo\WingtipTabularModel\WingtipTabularModel\obj\Development\Model.deploymenttargets
