@@ -819,7 +819,7 @@ module myApp {
     private svgRoot: d3.Selection<SVGElementInstance>;
     private plotArea: d3.Selection<SVGElementInstance>;
     private line: d3.svg.Line<[number][number][]>;
-    private path: d3.Selection<[number][]>;
+    private path: d3.Selection<[number,number][]>;
     private padding: number = 12;
 
     private yAxisGroup: d3.Selection<SVGElementInstance>;
@@ -933,7 +933,7 @@ module myApp {
     private svgRoot: d3.Selection<SVGElementInstance>;
     private plotArea: d3.Selection<SVGElementInstance>;
     private area: d3.svg.Area<[number][number][]>;
-    private path: d3.Selection<[number][]>;
+    private path: d3.Selection<[number, number][]>;
     private padding: number = 12;
 
     private yAxisGroup: d3.Selection<SVGElementInstance>;

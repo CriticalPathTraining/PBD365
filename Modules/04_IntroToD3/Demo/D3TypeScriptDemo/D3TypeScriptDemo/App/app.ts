@@ -4,7 +4,7 @@
  
   var visuals: ICustomVisual[] = [
     new Viz01(), new Viz02(), new Viz03, new Viz04(), new Viz05(), new Viz06, 
-    new Viz07(), new Viz08(), new Viz09, new Viz10(), new Viz11(), new Viz12 
+    new Viz07(), new Viz08(), new Viz09 , new Viz10() , new Viz11(), new Viz12 
   ];
 
   var loadedVisual: ICustomVisual;

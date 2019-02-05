@@ -1,6 +1,6 @@
 var myApp;
 (function (myApp) {
-    var Viz01 = (function () {
+    var Viz01 = /** @class */ (function () {
         function Viz01() {
             this.name = "Visual 1: Hello jQuery";
         }
@@ -32,7 +32,7 @@ var myApp;
         return Viz01;
     }());
     myApp.Viz01 = Viz01;
-    var Viz02 = (function () {
+    var Viz02 = /** @class */ (function () {
         function Viz02() {
             this.name = "Visual 2: Hello D3";
             this.padding = 20;
@@ -79,7 +79,7 @@ var myApp;
         return Viz02;
     }());
     myApp.Viz02 = Viz02;
-    var Viz03 = (function () {
+    var Viz03 = /** @class */ (function () {
         function Viz03() {
             this.name = "Visual 3 - Simple Bar Chart";
             this.dataset = [440, 290, 340, 330, 400, 512, 368];
@@ -125,7 +125,7 @@ var myApp;
         return Viz03;
     }());
     myApp.Viz03 = Viz03;
-    var Viz04 = (function () {
+    var Viz04 = /** @class */ (function () {
         function Viz04() {
             this.name = "Visual 4 - Bar Chart Labels";
             this.dataset = [440, 290, 340, 330, 400, 512, 368];
@@ -176,7 +176,7 @@ var myApp;
         return Viz04;
     }());
     myApp.Viz04 = Viz04;
-    var Viz05 = (function () {
+    var Viz05 = /** @class */ (function () {
         function Viz05() {
             this.name = "Visual 5 - Adding a Y Axis";
             this.dataset = [440, 290, 340, 330, 400, 512, 368];
@@ -254,7 +254,7 @@ var myApp;
         return Viz05;
     }());
     myApp.Viz05 = Viz05;
-    var Viz06 = (function () {
+    var Viz06 = /** @class */ (function () {
         function Viz06() {
             this.name = "Visual 6 - Bar Hover Events";
             this.dataset = [440, 290, 340, 330, 400, 512, 368];
@@ -334,7 +334,7 @@ var myApp;
         return Viz06;
     }());
     myApp.Viz06 = Viz06;
-    var Viz07 = (function () {
+    var Viz07 = /** @class */ (function () {
         function Viz07() {
             this.name = "Visual 7 - Animated Transitions";
             this.dataset = [440, 290, 340, 330, 400, 512, 368];
@@ -431,7 +431,7 @@ var myApp;
         return Viz07;
     }());
     myApp.Viz07 = Viz07;
-    var Viz08 = (function () {
+    var Viz08 = /** @class */ (function () {
         function Viz08() {
             this.name = "Visual 8 - Async Data Load";
             this.padding = 12;
@@ -537,7 +537,7 @@ var myApp;
         return Viz08;
     }());
     myApp.Viz08 = Viz08;
-    var Viz09 = (function () {
+    var Viz09 = /** @class */ (function () {
         function Viz09() {
             this.name = "Visual 9 - Scatter Chart";
             this.dataset = [
@@ -616,7 +616,7 @@ var myApp;
         return Viz09;
     }());
     myApp.Viz09 = Viz09;
-    var Viz10 = (function () {
+    var Viz10 = /** @class */ (function () {
         function Viz10() {
             this.name = "Visual 10 - Line Chart";
             this.dataset = [[0, 0], [0.5, 4], [1.0, 8], [1.6, 16], [2.1, 14], [3.0, 21]];
@@ -692,7 +692,7 @@ var myApp;
         return Viz10;
     }());
     myApp.Viz10 = Viz10;
-    var Viz11 = (function () {
+    var Viz11 = /** @class */ (function () {
         function Viz11() {
             this.name = "Visual 11 - Area Chart";
             this.dataset = [[0, 0], [0.5, 4], [1.0, 8], [1.6, 16], [2.1, 14], [3.0, 21]];
@@ -771,7 +771,7 @@ var myApp;
         return Viz11;
     }());
     myApp.Viz11 = Viz11;
-    var Viz12 = (function () {
+    var Viz12 = /** @class */ (function () {
         function Viz12() {
             this.name = "Visual 12 - Doughnut Chart";
             this.dataset = [21, 26, 16, 32];
