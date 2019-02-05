@@ -1,0 +1,8 @@
+public update(options: VisualUpdateOptions) {
+    console.log('Visual update', options);
+    this.target.innerHTML = 
+        `<table>
+          <tr><td>Width:</td><td>${options.viewport.width}</td></tr>
+          <tr><td>Height:</td><td>${options.viewport.height}</td></tr>
+        </table>`;
+}
