@@ -9,13 +9,12 @@
     "supportUrl": "",
     "gitHubUrl": ""
   },
-  "apiVersion": "1.5.0",
+  "apiVersion": "2.3.0",
   "author": {
     "name": "",
     "email": ""
   },
-  "assets": {
-    "icon": "assets/icon.png"
+  "assets": {    "icon": "assets/icon.png"
   },
   "externalJS": [
     "node_modules/jquery/dist/jquery.js",

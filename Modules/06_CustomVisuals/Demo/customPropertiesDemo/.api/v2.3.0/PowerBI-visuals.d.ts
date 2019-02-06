@@ -30,6 +30,20 @@ declare namespace powerbi {
         Edit = 1,
         InFocusEdit = 2,
     }
+    const enum EditMode {
+        /** Default editing mode for the visual. */
+        Default = 0,
+        /** Indicates the user has asked the visual to display advanced editing controls. */
+        Advanced = 1,
+    }
+    const enum AdvancedEditModeSupport {
+        /** The visual doesn't support Advanced Edit mode. Do not display the 'Edit' button on this visual. */
+        NotSupported = 0,
+        /** The visual supports Advanced Edit mode, but doesn't require any further changes aside from setting EditMode=Advanced. */
+        SupportedNoAction = 1,
+        /** The visual supports Advanced Edit mode, and requires that the host pops out the visual when entering Advanced EditMode. */
+        SupportedInFocus = 2,
+    }
     const enum ResizeMode {
         Resizing = 1,
         Resized = 2,
@@ -53,6 +67,25 @@ declare namespace powerbi {
         Selection = 0,
         /** No additional action or feedback from the visual is needed */
         None = 1,
+    }
+    /**
+     * Defines various events Visuals can notify the host on.
+     */
+    const enum VisualEventType {
+        /** Should be used at the beginning of a visual's rendering operation. */
+        RenderStarted = 0,
+        /** Should be used at the end of a visual's rendering operation. */
+        RenderCompleted = 1,
+        /** Should be used by visuals to trace information in PBI telemetry. */
+        Trace = 2,
+        /** Should be used by visuals to trace errors in PBI telemetry. */
+        Error = 3,
+    }
+    const enum FilterAction {
+        /** Merging filter into existing filters. */
+        merge = 0,
+        /** removing existing filter. */
+        remove = 1,
     }
 }
 ﻿
@@ -81,6 +114,7 @@ declare module powerbi.visuals.plugins {
     }
 }
 
+﻿
 
 declare module jsCommon {
     export interface IStringResourceProvider {
@@ -88,6 +122,7 @@ declare module jsCommon {
         getOptional(id: string): string;
     }
 }
+﻿
 
 declare module powerbi {
     /** 
@@ -232,8 +267,10 @@ declare module powerbi {
     }
 }
 
+
 declare module powerbi.visuals {
     import Selector = data.Selector;
+	import SelectorsByColumn = data.SelectorsByColumn;
 
     export interface ISelectionIdBuilder {
         withCategory(categoryColumn: DataViewCategoryColumn, index: number): this;
@@ -247,10 +284,11 @@ declare module powerbi.visuals {
         includes(other: ISelectionId, ignoreHighlight?: boolean): boolean;
         getKey(): string;
         getSelector(): Selector;
-        getSelectorsByColumn(): Selector;
+        getSelectorsByColumn(): SelectorsByColumn;
         hasIdentity(): boolean;
     }
 }
+﻿
 
 declare module powerbi {
     export const enum SortDirection {
@@ -258,11 +296,13 @@ declare module powerbi {
         Descending = 2,
     }
 }
+﻿
 
 declare module powerbi {
     export interface QueryTransformTypeDescriptor {
     }
 }
+﻿
 
 declare module powerbi {
     /** Represents views of a data set. */
@@ -284,6 +324,9 @@ declare module powerbi {
 
         /** When defined, describes whether the DataView contains just a segment of the complete data set. */
         segment?: DataViewSegmentMetadata;
+
+        /** Describes the data reduction applied to this data set when limits are exceeded. */
+        dataReduction?: DataViewReductionMetadata;
     }
 
     export interface DataViewMetadataColumn {
@@ -338,9 +381,25 @@ declare module powerbi {
          * This property is undefined for measure fields, as well as for grouping fields in DSR generated prior to the CY16SU08 or SU09 timeframe.
          */
         identityExprs?: data.ISQExpr[];
+
+        parameter?: DataViewParameterColumnMetadata;
     }
 
     export interface DataViewSegmentMetadata {
+    }
+
+    export interface DataViewReductionMetadata {
+        categorical?: DataViewCategoricalReductionMetadata;
+    }
+
+    export interface DataViewCategoricalReductionMetadata {
+        categories?: DataViewReductionAlgorithmMetadata;
+        values?: DataViewReductionAlgorithmMetadata;
+        metadata?: DataViewReductionAlgorithmMetadata;
+    }
+
+    export interface DataViewReductionAlgorithmMetadata {
+        binnedLineSample?: {};
     }
 
     export interface DataViewColumnAggregates {
@@ -351,6 +410,9 @@ declare module powerbi {
         median?: PrimitiveValue;
         count?: number;
         percentiles?: DataViewColumnPercentileAggregate[];
+
+        /** Represents a single value evaluation, similar to a total. */
+        single?: PrimitiveValue;
 
         /** Client-computed maximum value for a column. */
         maxLocal?: PrimitiveValue;
@@ -372,7 +434,6 @@ declare module powerbi {
 
     export interface DataViewCategoricalColumn {
         source: DataViewMetadataColumn;
-        values: PrimitiveValue[];
 
         /** The data repetition objects. */
         objects?: DataViewObjects[];
@@ -390,7 +451,7 @@ declare module powerbi {
 
     export interface DataViewValueColumnGroup {
         values: DataViewValueColumn[];
-        identity?: DataViewScopeIdentity;
+        identity?: data.DataRepetitionSelector;
 
         /** The data repetition objects. */
         objects?: DataViewObjects;
@@ -399,8 +460,9 @@ declare module powerbi {
     }
 
     export interface DataViewValueColumn extends DataViewCategoricalColumn {
+        values: PrimitiveValue[];
         highlights?: PrimitiveValue[];
-        identity?: DataViewScopeIdentity;
+        identity?: data.DataRepetitionSelector;
     }
 
     // NOTE: The following is needed for backwards compatibility and should be deprecated.  Callers should use
@@ -409,7 +471,8 @@ declare module powerbi {
     }
 
     export interface DataViewCategoryColumn extends DataViewCategoricalColumn {
-        identity?: DataViewScopeIdentity[];
+        values: PrimitiveValue[];
+        identity?: data.DataRepetitionSelector[];
 
         /** The set of expressions that define the identity for instances of the category.  This must match items in the DataViewScopeIdentity in the identity. */
         identityFields?: data.ISQExpr[];
@@ -438,7 +501,7 @@ declare module powerbi {
          * If this node represents a composite group node in matrix, this property will be undefined.
          */
         value?: PrimitiveValue;
-      
+
         /** 
          * This property contains all the values in this node. 
          * The key of each of the key-value-pair in this dictionary is the position of the column in the 
@@ -447,7 +510,7 @@ declare module powerbi {
         values?: { [id: number]: DataViewTreeNodeValue };
 
         children?: DataViewTreeNode[];
-        identity?: DataViewScopeIdentity;
+        identity?: data.DataRepetitionSelector;
 
         /** The data repetition objects. */
         objects?: DataViewObjects;
@@ -471,7 +534,7 @@ declare module powerbi {
     export interface DataViewTable {
         columns: DataViewMetadataColumn[];
 
-        identity?: DataViewScopeIdentity[];
+        identity?: data.DataRepetitionSelector[];
 
         /** The set of expressions that define the identity for rows of the table.  This must match items in the DataViewScopeIdentity in the identity. */
         identityFields?: data.ISQExpr[];
@@ -503,13 +566,13 @@ declare module powerbi {
 
         children?: DataViewMatrixNode[];
 
-         /* If this DataViewMatrixNode represents the  inner-most dimension of row groups (i.e. a leaf node), then this property will contain the values at the 
-         * matrix intersection under the group. The valueSourceIndex property will contain the position of the column in the select statement to which the 
-         * value belongs.
-         *
-         * When this DataViewMatrixNode is used under the context of DataView.matrix.columns, this property is not used.
-         */
-        values?: { [id: number]: DataViewMatrixNodeValue };         
+        /* If this DataViewMatrixNode represents the  inner-most dimension of row groups (i.e. a leaf node), then this property will contain the values at the 
+        * matrix intersection under the group. The valueSourceIndex property will contain the position of the column in the select statement to which the 
+        * value belongs.
+        *
+        * When this DataViewMatrixNode is used under the context of DataView.matrix.columns, this property is not used.
+        */
+        values?: { [id: number]: DataViewMatrixNodeValue };
 
         /**
          * Indicates the source metadata index on the node's level. Its value is 0 if omitted.
@@ -587,6 +650,10 @@ declare module powerbi {
         normalizedFiveStateKpiRange?: boolean;
     }
 
+    /** Indicates the column is a what-if parameter */
+    export interface DataViewParameterColumnMetadata {
+    }
+
     export interface DataViewScriptResultData {
         payloadBase64: string;
     }
@@ -602,6 +669,7 @@ declare module powerbi {
     /** Defines the PrimitiveValue range. */
     export type PrimitiveValueRange = ValueRange<PrimitiveValue>;
 }
+﻿
 
 declare module powerbi {
     /** Represents evaluated, named, custom objects in a DataView. */
@@ -632,58 +700,41 @@ declare module powerbi {
 
     export type DataViewPropertyValue = PrimitiveValue | StructuralObjectValue;
 }
+﻿
 
 declare module powerbi.data {
     /** Defines a match against all instances of given roles. */
     export interface DataViewRoleWildcard {
+        kind: DataRepetitionKind.RoleWildcard;
         roles: string[];
         key: string;
     }
 }
 
-declare module powerbi {
-    /** Encapsulates the identity of a data scope in a DataView. */
-    export interface DataViewScopeIdentity {
-        /** Predicate expression that identifies the scope. */
-        expr: data.ISQExpr;
-
-        /** Key string that identifies the DataViewScopeIdentity to a string, which can be used for equality comparison. */
-        key: string;
-    }
-}
-
 declare module powerbi.data {
-    /** Defines a match against all instances of a given DataView scope. */
+    /** Defines a match against all instances of a given DataView scope. Does not match Subtotals. */
     export interface DataViewScopeWildcard {
+        kind: DataRepetitionKind.ScopeWildcard;
         exprs: ISQExpr[];
         key: string;
     }
 }
+﻿
 
 declare module powerbi.data {
     import IStringResourceProvider = jsCommon.IStringResourceProvider;
 
     export type DisplayNameGetter = ((resourceProvider: IStringResourceProvider) => string) | string;
 }
-
-declare module powerbi.data {
-    /** Defines a selector for content, including data-, metadata, and user-defined repetition. */
-    export interface Selector {
-        /** Data-bound repetition selection. */
-        data?: DataRepetitionSelector[];
-	
-        /** Metadata-bound repetition selection.  Refers to a DataViewMetadataColumn queryName. */
-        metadata?: string;
-
-        /** User-defined repetition selection. */
-        id?: string;
-    }
-
-    export type DataRepetitionSelector = DataViewScopeIdentity | DataViewScopeWildcard | DataViewRoleWildcard; 
-}
+﻿
 
 declare module powerbi.data {
     //intentionally blank interfaces since this is not part of the public API
+    export interface Selector { }
+
+    export interface SelectorsByColumn { }
+
+    export interface DataRepetitionSelector { }	
 
     export interface ISemanticFilter { }
 
@@ -692,6 +743,35 @@ declare module powerbi.data {
     export interface ISQConstantExpr extends ISQExpr { }
 
 }
+
+
+declare namespace powerbi {
+    /** Kind of the Data Repetition Selector */
+
+    export const enum DataRepetitionKind {
+        RoleWildcard = 0,
+        ScopeIdentity = 1,
+        ScopeTotal = 2,
+        ScopeWildcard = 3,
+    }
+}
+
+
+declare module powerbi.data {
+    /** Defines a match against any Total within a given DataView scope. */
+    export interface DataViewScopeTotal {
+        kind: DataRepetitionKind.ScopeTotal;
+
+        /* The exprs defining the scope that this Total has been evaluated for
+         * It's an array to support expressing Total across a composite group
+         * Example: If this represents Total sales of USA across States, the Exprs wil refer to "States"
+        */
+        exprs: ISQExpr[];
+
+        key: string;
+    }
+}
+﻿
 
 declare module powerbi {
     export interface DefaultValueDefinition {
@@ -703,6 +783,7 @@ declare module powerbi {
         defaultValue: boolean;
     }
 }
+
 
 declare module powerbi {
     import DisplayNameGetter = powerbi.data.DisplayNameGetter;
@@ -721,6 +802,7 @@ declare module powerbi {
     }
     
 }
+﻿
 
 declare module powerbi {
     export interface Fill {
@@ -758,6 +840,7 @@ declare module powerbi {
         nullable: boolean;
     }  
 }
+﻿
 
 declare module powerbi {
     export interface FillRule extends FillRuleGeneric<string, number, string> {
@@ -799,12 +882,14 @@ declare module powerbi {
         color?: TColor;
     }
 }
+﻿
 
 declare module powerbi {
     export interface FilterTypeDescriptor {
         selfFilter?: boolean;
     }
 }
+﻿
 
 declare module powerbi {
     export type GeoJson = GeoJsonDefinitionGeneric<string>;
@@ -817,6 +902,7 @@ declare module powerbi {
 
     export interface GeoJsonTypeDescriptor { }
 }
+﻿
 
 declare module powerbi {
     export type ImageValue = ImageDefinitionGeneric<string>;
@@ -830,9 +916,13 @@ declare module powerbi {
     export interface ImageTypeDescriptor { }
 
 }
+﻿
 
 declare module powerbi {
+    import ISQExpr = powerbi.data.ISQExpr;
+
     export type Paragraphs = Paragraph[];
+
     export interface Paragraph {
         horizontalTextAlignment?: string;
         textRuns: TextRun[];
@@ -854,8 +944,10 @@ declare module powerbi {
         textStyle?: TextRunStyle;
         url?: string;
         value: string;
+        valueExpr?: ISQExpr;
     }
 }
+﻿
 
 declare module powerbi {
     import SemanticFilter = data.ISemanticFilter;
@@ -868,7 +960,8 @@ declare module powerbi {
         DefaultValueDefinition |
         ImageValue |
         Paragraphs |
-        GeoJson;
+        GeoJson |
+        DataBars;
     
     /** Describes a structural type in the client type system. Leaf properties should use ValueType. */
     export interface StructuralTypeDescriptor {
@@ -880,11 +973,13 @@ declare module powerbi {
         paragraphs?: ParagraphsTypeDescriptor;
         geoJson?: GeoJsonTypeDescriptor;
         queryTransform?: QueryTransformTypeDescriptor;
+        dataBars?: DataBarsTypeDescriptor;
 
         //border?: BorderTypeDescriptor;
         //etc.
     }
 }
+﻿
 
 declare module powerbi {
     /** Describes a data value type in the client type system. Can be used to get a concrete ValueType instance. */
@@ -951,8 +1046,10 @@ declare module powerbi {
         readonly alignment?: boolean;
         readonly labelDisplayUnits?: boolean;
         readonly fontSize?: boolean;
+        readonly fontFamily?: boolean;
         readonly labelDensity?: boolean;
         readonly bubbleSize?: boolean;
+        readonly altText?: boolean;
     }
 
     export interface OperationalTypeDescriptor {
@@ -962,13 +1059,36 @@ declare module powerbi {
     /** Describes instances of value type objects. */
     export type PrimitiveValue = string | number | boolean | Date;
 }
+﻿
+
+declare module powerbi {
+   
+    export interface DataBars {
+        minValue?: number;
+        maxValue?: number;
+        positiveColor: Fill;
+        negativeColor: Fill;
+        axisColor: Fill;
+        reverseDirection: boolean;
+        hideText: boolean;
+    }
+
+    export interface DataBarsTypeDescriptor {
+    }
+}
+﻿
 
 declare module powerbi {
     export interface IViewport {
         height: number;
         width: number;
     }
+
+    export interface ScaledViewport extends IViewport{
+        scale: number;
+    }
 }
+﻿
 
 declare module powerbi {
     import Selector = powerbi.data.Selector;
@@ -1040,12 +1160,16 @@ declare module powerbi {
 }
 
 
+
 declare module powerbi {
     import Selector = powerbi.data.Selector;
 
     export interface VisualObjectRepetition {
         /** The selector that identifies the objects. */
         selector: Selector;
+
+        /** Used to group differernt repetitions into containers. That will be used as the container displayName in the PropertyPane */
+        containerName?: string;
 
         /** The set of repetition descriptors for this object. */
         objects: {
@@ -1059,6 +1183,7 @@ declare module powerbi {
     }
 }
 
+﻿
 
 declare module powerbi.extensibility {
 
@@ -1083,8 +1208,12 @@ declare module powerbi.extensibility {
 
     export interface VisualUpdateOptions { }
 
-    export interface VisualConstructorOptions { }
+    export interface VisualConstructorOptions {
+        /** The loaded module, if any, defined by the IVisualPlugin.module. */
+        module?: any;
+    }
 }
+
 
 
 declare module powerbi {
@@ -1097,15 +1226,23 @@ declare module powerbi {
     }
 }
 
+
 declare module powerbi.extensibility {
+    export interface IPoint {
+        x: number;
+        y: number;
+    }
+    
     interface ISelectionManager {
+        showContextMenu(selectionId: ISelectionId, position: IPoint): IPromise<{}>;
         select(selectionId: ISelectionId | ISelectionId[], multiSelect?: boolean): IPromise<ISelectionId[]>;
         hasSelection(): boolean;
         clear(): IPromise<{}>;
         getSelectionIds(): ISelectionId[];
-        applySelectionFilter(): void;
+        registerOnSelectCallback(callback: (ids: ISelectionId[]) => void): void;
     }
 }
+
 
 declare module powerbi.extensibility {
     export interface ISelectionId { }
@@ -1118,11 +1255,54 @@ declare module powerbi.extensibility {
     }
 }
 
+
 declare module powerbi.extensibility {
     export interface IColorPalette {
         getColor(key: string): IColorInfo;
+        reset(): IColorPalette;
+    }
+    
+    /**
+     * Interface for expanded color palette.
+     * 
+     * isHighContrast: boolean - when true, indicates that high-contrast accesibility support is active. Draw the visual using only foreground and background colors, and clearly visible strokes.
+     * 
+     * Also exposes non-data colors: foreground and variants, background and variants, sentiment indicators (positive, neutral, negative) and some specifc colors (e.g. hyperlink)
+     */
+    export interface ISandboxExtendedColorPalette extends IColorPalette {
+        isHighContrast: boolean;
+        /* foreground variants*/
+        foreground: IColorInfo; /* Also used in High-contrast accessibility mode */
+        foregroundLight: IColorInfo;
+        foregroundDark: IColorInfo;
+        foregroundNeutralLight: IColorInfo;
+        foregroundNeutralDark: IColorInfo;
+        foregroundNeutralSecondary: IColorInfo;
+        foregroundNeutralSecondaryAlt: IColorInfo;
+        foregroundNeutralSecondaryAlt2: IColorInfo;
+        foregroundNeutralTertiary: IColorInfo;
+        foregroundNeutralTertiaryAlt: IColorInfo;
+        foregroundSelected: IColorInfo; /* Used only in High-contrast accessibility mode */
+        foregroundButton: IColorInfo;
+        /* background variants*/
+        background: IColorInfo; /* Also used in High-contrast accessibility mode */
+        backgroundLight: IColorInfo;
+        backgroundNeutral: IColorInfo;
+        backgroundDark: IColorInfo;
+        /* specific purpose colors*/
+        hyperlink: IColorInfo; /* Also used in High-contrast accessibility mode */
+        visitedHyperlink: IColorInfo;
+        mapPushpin: IColorInfo;
+        shapeStroke: IColorInfo;
+        selection?: IColorInfo;
+        separator?: IColorInfo;
+        /* sentiment indicators */
+        negative?: IColorInfo;
+        neutral?: IColorInfo;
+        positive?: IColorInfo;
     }
 }
+
 
 declare module powerbi.extensibility {
     interface VisualTooltipDataItem {
@@ -1156,13 +1336,95 @@ declare module powerbi.extensibility {
         hide(options: TooltipHideOptions): void;
     }
 }
+﻿
+
+declare module powerbi.extensibility {
+    interface ITelemetryService {
+        readonly instanceId: string;
+        trace(type: VisualEventType, payload?: string);
+    }
+}
+
 
 declare module powerbi.extensibility {
     export function VisualPlugin (options: IVisualPluginOptions): ClassDecorator;
 }
 
+declare module powerbi.extensibility {
+    export interface ILocalizationManager {
+        getDisplayName(key: string): string; 
+    }
+}
+
+declare module powerbi.extensibility {
+    export interface IAuthenticationService {
+        getAADToken(visualId?: string): IPromise<string>;
+    }
+}
+
+declare module powerbi.extensibility {
+    /** 
+     * Provides an access to local storage for read / write access 
+     */
+    export interface ILocalVisualStorageService {
+        /**
+         * Returns promise that resolves to the data associated with 'key' if it was found or rejects otherwise.
+         * 
+         * @param key - the name of the payload to retrieve
+         * @returns the promise that resolves to the data required or rejects if it wasn't found
+         */
+        get(key: string): IPromise<string>;
+
+        /**
+         * Saves the data to local storage. This data can be later be retrieved using the 'key'.
+         * Returns a promise that resolves to the amount of free space available to caller after the save if there 
+         * is any or rejects otherwise. 
+         * 
+         * @param key - the name of the payload to store
+         * @param data - the payload string to store
+         * @returns the promise resolves to the amount of free space available or rejects if there is no free space to store the data
+         */
+        set(key: string, data: string): IPromise<number>;
+
+        /**
+         * Deletes data associated with 'key' from local storage.
+         * 
+         * @param key - the name of the payload to remove
+         */
+        remove(key: string): void;
+    }
+}
+
+declare module powerbi.extensibility {
+    /** 
+     * An interface for reporting rendering events 
+     */
+    export interface IVisualEventService {
+        /**
+         * Called just before the actual rendering was started.
+         */
+        renderingStarted(options: VisualUpdateOptions): void;
+
+        /**
+         * Called immediately after finishing rendering successfully
+         */
+        renderingFinished(options: VisualUpdateOptions): void;
+
+        /**
+         * Called when rendering failed with optional reason string
+         */
+        renderingFailed(options: VisualUpdateOptions, reason?: string): void;
+    }
+}
+
+declare module powerbi {
+    export interface IFilter { }
+}
+
 /**
- * Change Log Version 1.5.0
+ * Change Log Version 1.13.0
+ *  Expanded `host.colorPalette` now expose a boolean `isHighContrast` flag and several non-data colors 
+ *  including `foreground`, `foregroundSelected`, `background` and `hyperlink` all of which are required for high-contrast accessibility support.
  */
 
 declare module powerbi.extensibility.visual {
@@ -1184,11 +1446,21 @@ declare module powerbi.extensibility.visual {
     export interface IVisualHost extends extensibility.IVisualHost {
         createSelectionIdBuilder: () => visuals.ISelectionIdBuilder;
         createSelectionManager: () => ISelectionManager;
-        colorPalette: IColorPalette;
+        colorPalette: ISandboxExtendedColorPalette;
         persistProperties: (changes: VisualObjectInstancesToPersist) => void;
+        applyJsonFilter: (filter: IFilter[]|IFilter, objectName: string, propertyName: string, action: FilterAction)=> void;
         tooltipService: ITooltipService;
+        telemetry: ITelemetryService;
+        authenticationService: IAuthenticationService;
         locale: string;
         allowInteractions: boolean;
+        launchUrl: (url: string) => void;
+        fetchMoreData: () => boolean;
+        instanceId: string;
+        refreshHostData: () => void;
+        createLocalizationManager: () => ILocalizationManager;
+        storageService: ILocalVisualStorageService;
+        eventService: IVisualEventService;
     }
 
     export interface VisualUpdateOptions extends extensibility.VisualUpdateOptions {
@@ -1196,6 +1468,9 @@ declare module powerbi.extensibility.visual {
         dataViews: DataView[];
         type: VisualUpdateType;
         viewMode?: ViewMode;
+        editMode?: EditMode;
+        operationKind?: VisualDataChangeOperationKind;
+        jsonFilters?: IFilter[]; 
     }
 
     export interface VisualConstructorOptions extends extensibility.VisualConstructorOptions {
