@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HelloPowerBiApi")]
+[assembly: AssemblyTitle("PowerBiServiceLab")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HelloPowerBiApi")]
+[assembly: AssemblyProduct("PowerBiServiceLab")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8d5d61c0-d560-4290-a462-6eab574faaad")]
+[assembly: Guid("10ca01ab-8388-4ff2-8eee-b83d07041029")]
 
 // Version information for an assembly consists of the following four values:
 //
