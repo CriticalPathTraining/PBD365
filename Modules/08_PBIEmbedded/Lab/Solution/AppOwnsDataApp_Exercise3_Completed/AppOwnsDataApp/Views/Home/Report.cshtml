@@ -1,0 +1,37 @@
+﻿  @model AppOwnsDataApp.Models.ReportEmbeddingData
+
+  <div id="embedContainer" />
+
+  <script src="~/Scripts/powerbi.js"></script>
+
+  <script>
+
+  // data required for embedding Power BI report
+  var embedReportId = "@Model.reportId";
+  var embedUrl = "@Model.embedUrl";
+  var accessToken = "@Model.accessToken";
+
+  // Get models object to access enums for embed configuration
+  var models = window['powerbi-client'].models;
+
+  var config = {
+    type: 'report',
+    id: embedReportId,
+    embedUrl: embedUrl,
+    accessToken: accessToken,
+    permissions: models.Permissions.All,
+    tokenType: models.TokenType.Embed,
+    viewMode: models.ViewMode.View,
+    settings: {
+      filterPaneEnabled: false,
+      navContentPaneEnabled: true,
+    }
+  };
+
+  // Get a reference to HTML element that will be embed container
+  var reportContainer = document.getElementById('embedContainer');
+
+  // Embed the report and display it within the div container.
+  var report = powerbi.embed(reportContainer, config);
+
+  </script>

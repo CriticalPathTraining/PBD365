@@ -23,7 +23,7 @@
       Console.WriteLine("Creating app workspace named " + targetAppWorkpaceName);
       Console.WriteLine();
       GroupCreationRequest request = new GroupCreationRequest(targetAppWorkpaceName);
-      Group AppWorkspace = pbiClient.Groups.CreateGroup(request);
+      Group AppWorkspace = pbiClient.Groups.CreateGroup(request, workspaceV2: true);
       targetAppWorkspaceId = AppWorkspace.Id;      
     }
 
