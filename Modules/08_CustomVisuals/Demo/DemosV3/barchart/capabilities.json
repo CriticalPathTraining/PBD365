@@ -1,0 +1,82 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Bar Category",
+            "name": "categoryRole",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Bar Measurement",
+            "name": "measureRole",
+            "kind": "Measure"
+        }
+    ],
+    "dataViewMappings": [
+        {
+            "conditions": [
+                {
+                    "categoryRole": {
+                        "max": 1
+                    },
+                    "measureRole": {
+                        "max": 1
+                    }
+                }
+            ],
+            "categorical": {
+                "categories": {
+                    "for": {
+                        "in": "categoryRole"
+                    },
+                    "dataReductionAlgorithm": {
+                        "top": {}
+                    }
+                },
+                "values": {
+                    "select": [
+                        {
+                            "bind": {
+                                "to": "measureRole"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "objects": {
+        "barchartProperties": {
+            "displayName": "Bar Chart Properties",
+            "properties": {
+                "sortBySize": {
+                    "displayName": "Sort by Size",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "barColor": {
+                    "displayName": "Bar Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "xAxisFontSize": {
+                    "displayName": "X Axis Font Size",
+                    "type": {
+                        "integer": true
+                    }
+                },
+                "yAxisFontSize": {
+                    "displayName": "Y Axis Font Size",
+                    "type": {
+                        "integer": true
+                    }
+                }
+            }
+        }
+    }
+}

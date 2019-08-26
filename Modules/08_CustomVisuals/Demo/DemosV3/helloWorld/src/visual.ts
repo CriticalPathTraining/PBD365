@@ -1,0 +1,74 @@
+"use strict";
+
+import "./../style/visual.less";
+
+import powerbi from "powerbi-visuals-api";
+import VisualConstructorOptions = powerbi.extensibility.visual.VisualConstructorOptions;
+import VisualUpdateOptions = powerbi.extensibility.visual.VisualUpdateOptions;
+import IVisual = powerbi.extensibility.visual.IVisual;
+
+import * as d3 from "d3";
+
+export class Visual implements IVisual {
+
+    private svgRoot: d3.Selection<SVGElement, {}, HTMLElement, any>;
+    private ellipse: d3.Selection<SVGElement, {}, HTMLElement, any>;
+    private text: d3.Selection<SVGElement, {}, HTMLElement, any>;
+    private padding: number = 20;
+
+    constructor(options: VisualConstructorOptions) {
+        console.log('Visual constructor', options);
+
+        this.svgRoot = d3.select(options.element).append("svg");
+
+        this.ellipse = this.svgRoot.append("ellipse")
+            .attr("fill", "#FEBF0F");
+
+        this.text = this.svgRoot.append("text")
+            .text("Hello D3")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "central");
+    
+        this.RenderVisual(options.element.clientWidth, options.element.clientHeight);
+
+    }
+
+    public update(options: VisualUpdateOptions) {
+
+        console.log('Visual update', options);
+        
+        this.RenderVisual(options.viewport.width, options.viewport.height);
+
+    }
+
+    private RenderVisual(clientWidth: number, clientHeight: number) {
+
+        this.svgRoot
+            .attr("width", clientWidth)
+            .attr("height", clientHeight);
+
+        var plot = {
+            xOffset: this.padding,
+            yOffset: this.padding,
+            width: clientWidth - (this.padding * 2),
+            height: clientHeight - (this.padding * 2),
+        };
+
+        this.ellipse
+            .attr("cx", plot.xOffset + (plot.width * 0.5))
+            .attr("cy", plot.yOffset + (plot.height * 0.5))
+            .attr("rx", (plot.width * 0.5))
+            .attr("ry", (plot.height * 0.5))
+
+        var fontSizeForWidth: number = plot.width * .20;
+        var fontSizeForHeight: number = plot.height * .35;
+        var fontSize: number = d3.min([fontSizeForWidth, fontSizeForHeight]);
+
+        this.text
+            .attr("x", plot.xOffset + (plot.width / 2))
+            .attr("y", plot.yOffset + (plot.height / 2))
+            .attr("width", plot.width)
+            .attr("height", plot.height)
+            .attr("font-size", fontSize);
+    }
+}

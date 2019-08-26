@@ -1,0 +1,24 @@
+{
+    "dataRoles": [ { "displayName": "My Single Value", "name": "myvalue", "kind": "Measure" }],
+    "dataViewMappings": [ { 
+        "conditions": [ { "myvalue": { "min": 1, "max": 1 } } ],
+        "single": { "role": "myvalue" }
+    } ],
+    "objects": {
+      
+      "myVisualProperties": {
+        "displayName": "My Visual Properties",
+        "properties": {
+          "message": {
+            "displayName": "User Message",
+            "type": { "text": true } 
+          },
+          "backgroundColor": {
+            "displayName": "Background Color",
+            "type": { "fill": { "solid": { "color": true } } }
+          }
+        }
+      }
+    }
+  }
+  

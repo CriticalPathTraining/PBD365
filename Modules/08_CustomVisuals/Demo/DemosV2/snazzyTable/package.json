@@ -1,0 +1,12 @@
+{
+  "name": "visual",
+  "dependencies": {
+    "powerbi-visuals-utils-formattingutils": "^0.4.0"
+  },
+  "devDependencies": {
+    "@types/d3": "^3.5.38",
+    "@types/jquery": "^2.0.45",
+    "d3": "^3.5.17",
+    "jquery": "^3.2.1"
+  }
+}

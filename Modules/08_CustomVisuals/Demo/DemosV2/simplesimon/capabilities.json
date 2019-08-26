@@ -1,0 +1,53 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "My Single Value",
+            "name": "myvalue",
+            "kind": "Measure"
+        }
+    ],
+    "dataViewMappings": [
+        {
+            "conditions": [
+                {
+                    "myvalue": {
+                        "min": 1,
+                        "max": 1
+                    }
+                }
+            ],
+            "single": {
+                "role": "myvalue"
+            }
+        }
+    ],
+    "objects": {
+        "visualProperties": {
+            "displayName": "My Custom Visual Properties",
+            "properties": {
+                "showName": {
+                    "displayName": "Show Name",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Font Size",
+                    "type": {
+                        "integer": true
+                    }
+                },
+                "fontColor": {
+                    "displayName": "Font Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

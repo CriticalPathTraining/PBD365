@@ -1,0 +1,21 @@
+@cptRed: #9F1B30;
+@cptOrange: #D16B2C;
+@cptYellow:  #FEBF0F;
+
+.cptShape{
+    fill: @cptYellow;
+    stroke: @cptRed;
+}
+
+svg {
+    ellipse {
+        .cptShape();
+        stroke-width: 8px;
+    }
+    
+    text {
+        fill: @cptOrange;
+        stroke-width: 4px;
+        stroke: @cptRed;
+    }
+}
