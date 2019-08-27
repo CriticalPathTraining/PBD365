@@ -4,45 +4,45 @@ using System.Threading.Tasks;
 using Microsoft.Rest;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web;
+using Microsoft.Identity.Client;
 
 namespace ThirdPartyEmbeddingDemo.Models {
 
   public class PbiEmbeddedManager {
 
-    private static string aadAuthorizationEndpoint = "https://login.microsoftonline.com/common";
-    private static string resourceUriPowerBi = "https://analysis.windows.net/powerbi/api";
-    private static string urlPowerBiRestApiRoot = "https://api.powerbi.com/";
+    private static readonly string clientId = ConfigurationManager.AppSettings["client-id"];
+    private static readonly string clientSecret = ConfigurationManager.AppSettings["client-secret"];
+    private static readonly string tenantName = ConfigurationManager.AppSettings["tenant-name"];
 
-    private static string applicationId = ConfigurationManager.AppSettings["application-id"];
+    private static readonly string workspaceId = ConfigurationManager.AppSettings["app-workspace-id"];
+    private static readonly string datasetId = ConfigurationManager.AppSettings["dataset-id"];
+    private static readonly string reportId = ConfigurationManager.AppSettings["report-id"];
+    private static readonly string dashboardId = ConfigurationManager.AppSettings["dashboard-id"];
 
-    private static string workspaceId = ConfigurationManager.AppSettings["app-workspace-id"];
-    private static string datasetId = ConfigurationManager.AppSettings["dataset-id"];
-    private static string reportId = ConfigurationManager.AppSettings["report-id"];
-    private static string dashboardId = ConfigurationManager.AppSettings["dashboard-id"];
+    // endpoint for tenant-specific authority 
+    private static readonly string tenantAuthority = "https://login.microsoftonline.com/" + tenantName;
 
-    private static string userName = ConfigurationManager.AppSettings["aad-account-name"];
-    private static string userPassword = ConfigurationManager.AppSettings["aad-account-password"];
+    // Power BI Service API Root URL
+    const string urlPowerBiRestApiRoot = "https://api.powerbi.com/";
 
-    private static string GetAccessToken() {
+    static string GetAppOnlyAccessToken() {
 
-      AuthenticationContext authenticationContext = new AuthenticationContext(aadAuthorizationEndpoint);
+      var appConfidential = ConfidentialClientApplicationBuilder.Create(clientId)
+                              .WithClientSecret(clientSecret)
+                              .WithAuthority(tenantAuthority)
+                              .Build();
 
-      AuthenticationResult userAuthnResult =
-        authenticationContext.AcquireTokenAsync(
-          resourceUriPowerBi,
-          applicationId,
-          new UserPasswordCredential(userName, userPassword)).Result;
-
-      return userAuthnResult.AccessToken;
+      string[] scopesDefault = new string[] { "https://analysis.windows.net/powerbi/api/.default" };
+      var authResult = appConfidential.AcquireTokenForClient(scopesDefault).ExecuteAsync().Result;
+      return authResult.AccessToken;
     }
 
     private static PowerBIClient GetPowerBiClient() {
-      var tokenCredentials = new TokenCredentials(GetAccessToken(), "Bearer");
+      var tokenCredentials = new TokenCredentials(GetAppOnlyAccessToken(), "Bearer");
       return new PowerBIClient(new Uri(urlPowerBiRestApiRoot), tokenCredentials);
     }
 
