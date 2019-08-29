@@ -5,14 +5,14 @@
         "guid": "barchart5AF76F3126A847EF8B607BDF84B49AB1",
         "visualClassName": "Visual",
         "version": "1.0.0",
-        "description": "",
-        "supportUrl": "",
+        "description": "xxxxx",
+        "supportUrl": "x",
         "gitHubUrl": ""
     },
     "apiVersion": "2.6.0",
     "author": {
-        "name": "",
-        "email": ""
+        "name": "TedP",
+        "email": "ted@ted.ted"
     },
     "assets": {
         "icon": "assets/icon.png"

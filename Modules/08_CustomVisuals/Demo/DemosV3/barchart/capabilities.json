@@ -13,11 +13,7 @@
     ],
     "dataViewMappings": [
         {
-            "conditions": [
-                {
-                    "categoryRole": {
-                        "max": 1
-                    },
+            "conditions": [{ "categoryRole": {"max": 1},
                     "measureRole": {
                         "max": 1
                     }
@@ -25,21 +21,11 @@
             ],
             "categorical": {
                 "categories": {
-                    "for": {
-                        "in": "categoryRole"
-                    },
-                    "dataReductionAlgorithm": {
-                        "top": {}
-                    }
+                    "for": { "in": "categoryRole" },
+                    "dataReductionAlgorithm": { "top": {} }
                 },
                 "values": {
-                    "select": [
-                        {
-                            "bind": {
-                                "to": "measureRole"
-                            }
-                        }
-                    ]
+                    "select": [ { "bind": { "to": "measureRole" } } ]
                 }
             }
         }

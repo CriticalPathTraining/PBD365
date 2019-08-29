@@ -223,10 +223,12 @@ export class Visual implements IVisual {
     public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
         console.log("EXECUTING: enumerateObjectInstances...");
         var visualObjects: VisualObjectInstanceEnumerationObject = <VisualObjectInstanceEnumerationObject>VisualSettings.enumerateObjectInstances(this.settings, options);
+       
         visualObjects.instances[0].validValues = {
             xAxisFontSize: { numberRange: { min: 7, max: 24 } },
             yAxisFontSize: { numberRange: { min: 7, max: 24 } },
         };
+        
         return visualObjects;
     }
 

@@ -1,0 +1,17 @@
+{
+    "version": "1.0.0",
+    "author": {"name":"TedP","email":"ted@ted.ted"},
+    "resources": [
+        {
+            "resourceId": "rId0",
+            "sourceType": 5,
+            "file": "resources/barchart5AF76F3126A847EF8B607BDF84B49AB1.pbiviz.json"
+        }
+    ],
+    "visual": {"name":"barchart","displayName":"barchart","guid":"barchart5AF76F3126A847EF8B607BDF84B49AB1","visualClassName":"Visual","version":"1.0.0","description":"xxxxx","supportUrl":"x","gitHubUrl":""},
+    "metadata": {
+        "pbivizjson": {
+            "resourceId": "rId0"
+        }
+    }  
+}
