@@ -20,7 +20,11 @@ import VisualObjectInstanceEnumerationObject = powerbi.VisualObjectInstanceEnume
 import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInstancesOptions;
 import Fill = powerbi.Fill;
 import VisualTooltipDataItem = powerbi.extensibility.VisualTooltipDataItem;
+
+import ISelectionIdBuilder = powerbi.extensibility.ISelectionIdBuilder;
+import ISelectionId = powerbi.visuals.ISelectionId;
 import ISelectionManager = powerbi.extensibility.ISelectionManager;
+
 
 import { valueFormatter as vf, textMeasurementService as tms } from "powerbi-visuals-utils-formattingutils";
 import IValueFormatter = vf.IValueFormatter;
@@ -34,6 +38,8 @@ type DataSelection<T> = d3.Selection<d3.BaseType, T, any, any>;
 export interface BarchartDataPoint {
     Category: string;
     Value: number;
+    Opacity: number;
+    selectionId: ISelectionId;
 }
 
 export interface BarchartViewModel {
@@ -48,7 +54,7 @@ export interface BarchartViewModel {
     MeasureName?: string;
 }
 
-export class Barchart implements IVisual {
+export class SmartieBarchart implements IVisual {
 
     private svg: Selection<SVGElement>;
     private barContainer: Selection<SVGGElement>;
@@ -58,10 +64,13 @@ export class Barchart implements IVisual {
     private yAxisContainer: Selection<SVGGElement>;
 
     private hostService: IVisualHost;
+    private locale: string;
+    private selectionManager: ISelectionManager;
 
     private settings: VisualSettings;
 
     private viewModel: BarchartViewModel;
+    private barDataPoints: BarchartDataPoint[];
 
     private static margin = {
         top: 20,
@@ -75,6 +84,8 @@ export class Barchart implements IVisual {
         console.log("Constructor executing", options);
 
         this.hostService = options.host;
+        this.locale = options.host.locale;
+        this.selectionManager = options.host.createSelectionManager();
 
         this.svg = d3.select(options.element)
             .append('svg')
@@ -96,31 +107,38 @@ export class Barchart implements IVisual {
             .append('g')
             .classed('yAxis', true);
 
-
         this.settings = VisualSettings.getDefault() as VisualSettings;
+
+        this.selectionManager.registerOnSelectCallback(() => {
+            this.syncSelectionState(this.barSelection, this.selectionManager.getSelectionIds() as ISelectionId[]);
+        });
 
     }
 
     public update(options: VisualUpdateOptions) {
+
+        console.log("Update executing...", options);
 
         var viewModel: BarchartViewModel = this.createViewModel(options.dataViews[0]);
         if (viewModel.IsNotValid) {
             return;
         }
 
+        this.barDataPoints = viewModel.DataPoints;
+
         // set height and width of root SVG element using viewport passed by Power BI host
         this.svg.attr("height", options.viewport.height);
         this.svg.attr("width", options.viewport.width);
 
-        let marginLeft = Barchart.margin.left * (viewModel.YAxisFontSize / 10);
-        let marginBottom = Barchart.margin.bottom * (viewModel.XAxisFontSize / 10);
-        let marginTop = Barchart.margin.top;
-        let marginRight = Barchart.margin.right;
+        let marginLeft = SmartieBarchart.margin.left * (viewModel.YAxisFontSize / 10);
+        let marginBottom = SmartieBarchart.margin.bottom * (viewModel.XAxisFontSize / 10);
+        let marginTop = SmartieBarchart.margin.top;
+        let marginRight = SmartieBarchart.margin.right;
 
         let plotArea = {
             x: marginLeft,
             y: marginTop,
-            width: options.viewport.width - (marginLeft + Barchart.margin.right),
+            width: options.viewport.width - (marginLeft + SmartieBarchart.margin.right),
             height: options.viewport.height - (marginTop + marginBottom)
         };
 
@@ -154,11 +172,8 @@ export class Barchart implements IVisual {
             .rangeRound([plotArea.height, 0])
             .domain([0, maxValueY * 1.02]);
 
-
         var yAxis = d3.axisLeft(yScale)
             .tickFormat((d) => valueFormatter.format(d));
-        //          .tickPadding(12).ticks(5);
-
 
         this.yAxisContainer
             .attr("class", "yAxis")
@@ -183,12 +198,58 @@ export class Barchart implements IVisual {
             .attr("y", (dataPoint: BarchartDataPoint) => yScale(Number(dataPoint.Value)))
             .attr("width", xScale.bandwidth())
             .attr("height", (dataPoint: BarchartDataPoint) => (plotArea.height - yScale(Number(dataPoint.Value))))
-            .style("fill", (dataPoint: BarchartDataPoint) => viewModel.BarColor);
+            .style("fill", (dataPoint: BarchartDataPoint) => viewModel.BarColor)
+            .style("opacity", (dataPoint: BarchartDataPoint) => dataPoint.Opacity);
+
+        barSelectionMerged.on('click', (d) => {
+            const isCtrlPressed: boolean = (d3.event as MouseEvent).ctrlKey;
+            this.selectionManager.select(d.selectionId, isCtrlPressed)
+                .then((ids: ISelectionId[]) => {
+                    this.syncSelectionState(barSelectionMerged, ids);
+                });
+            (<Event>d3.event).stopPropagation();
+        });
 
         this.barSelection
             .exit()
             .remove();
 
+    }
+
+    private syncSelectionState(selection: DataSelection<BarchartDataPoint>, selectionIds: ISelectionId[]): void {
+
+        console.log("syncSelectionState executing...")
+        if (!selection || !selectionIds) { return; }
+
+        if (!selectionIds.length) {
+            selection
+                .style("fill-opacity", null)
+                .style("stroke-opacity", null);
+            return;
+        }
+
+        const self: this = this;
+
+        selection.each(function (barDataPoint: BarchartDataPoint) {
+
+            const isSelected: boolean = self.isSelectionIdInArray(selectionIds, barDataPoint.selectionId);
+
+            const opacity: number = isSelected ? 1.0 : 0.5;
+
+            d3.select(this).transition().duration(500)
+                .style("fill-opacity", opacity)
+                .style("stroke-opacity", opacity);
+        });
+    }
+
+    private isSelectionIdInArray(selectionIds: ISelectionId[], selectionId: ISelectionId): boolean {
+        if (!selectionIds || !selectionId) {
+            return false;
+        }
+
+        return selectionIds.some((currentSelectionId: ISelectionId) => {
+            return currentSelectionId.includes(selectionId);
+        });
     }
 
     public createViewModel(dataView: DataView): BarchartViewModel {
@@ -204,20 +265,36 @@ export class Barchart implements IVisual {
         this.settings = VisualSettings.parse(dataView) as VisualSettings;
 
         var categoricalDataView: DataViewCategorical = dataView.categorical;
-        var categoryColumn: DataViewCategoricalColumn = categoricalDataView.categories[0];
+        var categoryColumn: DataViewCategoryColumn = categoricalDataView.categories[0];
         var categoryNames: PrimitiveValue[] = categoricalDataView.categories[0].values;
         var categoryValues: PrimitiveValue[] = categoricalDataView.values[0].values;
+        // use hightlights to determine which datapoints are selected
+        var categoryHighlightedValues: PrimitiveValue[] = categoricalDataView.values[0].highlights;
 
         var barchartDataPoints: BarchartDataPoint[] = [];
 
         for (var i = 0; i < categoryValues.length; i++) {
+
             // get category name and category value
             var category: string = <string>categoryNames[i];
             var categoryValue: number = <number>categoryValues[i];
+            //
+            var HighlightedValueIsNull: boolean = (categoryHighlightedValues != null) && (categoryHighlightedValues[i] == null);
+            var opacity: number = (HighlightedValueIsNull ? 0.5 : 1.0);
+
+            let selectionId: ISelectionId =
+                <ISelectionId>this.hostService
+                    .createSelectionIdBuilder()
+                    .withCategory(categoryColumn, i)
+                    .createSelectionId();
+
+
             // add new data point to barchartDataPoints collection
             barchartDataPoints.push({
                 Category: category,
-                Value: categoryValue
+                Value: categoryValue,
+                Opacity: opacity,
+                selectionId: selectionId
             });
         }
 
@@ -236,7 +313,7 @@ export class Barchart implements IVisual {
         if (sortBySize) {
             barchartDataPoints.sort((x, y) => { return y.Value - x.Value })
         }
-      
+
         // return view model to update method
         return {
             IsNotValid: false,

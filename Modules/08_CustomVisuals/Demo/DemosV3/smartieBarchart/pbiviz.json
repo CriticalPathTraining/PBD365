@@ -1,9 +1,9 @@
 {
     "visual": {
-        "name": "barchart",
-        "displayName": "barchart",
+        "name": "smartieBarchart",
+        "displayName": "Smartie Barchart",
         "guid": "barchart5AF76F3126A847EF8B607BDF84B49AB1",
-        "visualClassName": "Barchart",
+        "visualClassName": "SmartieBarchart",
         "version": "1.0.0",
         "description": "A demo custom visual by Ted Pattison of Critical Path Training",
         "supportUrl": "https://criticalpathtraining.com",
