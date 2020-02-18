@@ -1,0 +1,25 @@
+    static void DisplayApps() {
+
+      string AccessToken = GetAccessTokenInteractive(scopesReadUserApps);
+      var pbiClient = new PowerBIClient(new Uri(urlPowerBiRestApiRoot),
+                                             new TokenCredentials(AccessToken, "Bearer"));
+
+      Console.WriteLine();
+      var apps = pbiClient.Apps.GetApps().Value;
+      foreach (var app in apps) {
+        Console.WriteLine(app.Name + " [" + app.Id + "]");
+        var dashboards = pbiClient.Apps.GetDashboards(app.Id).Value;
+        Console.WriteLine("- Dashboards");
+        foreach (var dashboard in dashboards) {
+          Console.WriteLine("  - " + dashboard.DisplayName);
+        }
+        var reports = pbiClient.Apps.GetReports(app.Id).Value;
+        Console.WriteLine("- Reports");
+        foreach (var report in reports) {
+          Console.WriteLine("  - " + report.Name);
+        }
+        Console.WriteLine();
+      }
+
+      Console.WriteLine();
+    }
