@@ -1,1 +1,0 @@
-Materials will be supplied by instructor
